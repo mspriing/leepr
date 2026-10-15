@@ -12,7 +12,15 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const regions = JSON.parse(readFileSync(resolve(here, '../../data/regions.json'), 'utf8'))
+const allRegions = JSON.parse(readFileSync(resolve(here, '../../data/regions.json'), 'utf8'))
+
+// A region marked case_only exists for a one-off analysis run from the backend
+// (us-pa-northampton, the Business with Integrity Ironwood case). The map and
+// the docs page never show it, and the docs page does arithmetic on these
+// counts against the regions it draws, so counting it here would make the site
+// contradict itself.
+const regions = Object.fromEntries(
+  Object.entries(allRegions).filter(([, region]) => region.case_only !== true))
 
 // A site cannot be ranked without these four. This mirrors the engine's own
 // unevaluable rule, so the number the page shows is the number that can be run.

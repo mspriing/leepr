@@ -545,6 +545,7 @@ const METRO_COUNTY_FIPS: Record<string, string> = {
   'us-ne-omaha':         '31055',  // Douglas County, NE
   'us-ia-des-moines':    '19153',  // Polk County, IA
   'us-nv-reno':          '32031',  // Washoe County, NV
+  'us-pa-northampton':   '42095',  // Northampton County, PA (Ironwood case site)
 }
 
 async function ingestUSRiskScores(regions: RegionsFile): Promise<void> {
@@ -892,6 +893,14 @@ async function ingestUSGridInterconnection(regions: RegionsFile): Promise<void> 
     if (region.precision !== 'metro' || !key.startsWith('us-') || !region.parent_state) continue
     const parent = regions[region.parent_state]
     if (!parent || parent.grid_interconnection_years.value === null) continue
+    // A metro whose grid estimate was modeled by hand from its own sources
+    // (us-pa-northampton) keeps it. Only values this loop wrote itself, which
+    // all carry an "inherited from" method, are refreshed from the parent.
+    const own = region.grid_interconnection_years
+    if (own.value !== null && own.basis === 'modeled' && own.method && !own.method.startsWith('inherited from')) {
+      skipped++
+      continue
+    }
     write(region, 'grid_interconnection_years',
       parent.grid_interconnection_years.value, null, null, SOURCE, 'modeled',
       `inherited from ${region.parent_state}; ${LBNL_CAVEAT}`)
@@ -958,6 +967,7 @@ const REGION_COORDS: Record<string, [number, number]> = {
   'us-ne-omaha':         [ 41.26, -95.94],
   'us-ia-des-moines':    [ 41.60, -93.62],
   'us-nv-reno':          [ 39.53,-119.81],
+  'us-pa-northampton':   [ 40.90, -75.10],   // Upper Mount Bethel Township
   'ie-dublin':           [ 53.33,  -6.25],
   'nl-amsterdam':        [ 52.37,   4.90],
   'de-frankfurt':        [ 50.11,   8.68],

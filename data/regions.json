@@ -5925,6 +5925,7 @@
     "label": "Ironwood site: Upper Mount Bethel (Northampton County), PA",
     "precision": "metro",
     "parent_state": "us-pa",
+    "case_only": true,
     "power_rate_usd_per_kwh": {
       "value": 0.0936,
       "low": 0.0851,
@@ -5991,11 +5992,11 @@
     "tax_abatement_years": {
       "value": 0,
       "low": 0,
-      "high": 10,
+      "high": 5,
       "source_url": "https://www.wfmz.com/news/area/lehighvalley/lou-pektor-prevails-river-pointe-keeps-tax-break-in-upper-mount-bethel/article_b7f90aaa-c16a-11ee-ae87-a78b19396777.html",
       "last_verified": "2026-08",
       "basis": "modeled",
-      "method": "A LERTA property-tax abatement (100% in year 1, declining to zero over ten years) covers the former River Pointe land, extended to 31 Dec 2027 by Ordinance 744-2023. Northampton County Council introduced a repeal on 7 May 2026 (outcome not found), and the Aug 2026 MOU dropped a clause to extend it ten more years. It expires before a 2028+ campus would be taxed, so the value is 0; high 10 is the case where it is extended. Pennsylvania's data center incentive is a sales and use tax exemption on equipment (certification valid 25 years; $100M investment and 45 jobs in a county over 250,000 people), not a property tax abatement. The engine reads abatement only from user input, so this field is reference only."
+      "method": "A LERTA property-tax abatement (100% in year 1, declining to zero over ten years) covers the former River Pointe land, extended to 31 Dec 2027 by Ordinance 744-2023. Northampton County Council introduced a repeal on 7 May 2026 (outcome not found), and the Aug 2026 MOU dropped a clause to extend it ten more years. It expires before a 2028+ campus would be taxed, so the value is 0. High 5 is the case where it is extended: at a 10% discount rate a ten-year schedule declining from 100% is worth 3.86 years of full abatement, closest to 5 full years (3.79), the integer the engine accepts. Pennsylvania's data center incentive is a sales and use tax exemption on equipment (certification valid 25 years; $100M investment and 45 jobs in a county over 250,000 people), not a property tax abatement. The engine reads abatement only from user input, so this field is reference only."
     },
     "incentive_usd_per_kw": {
       "value": 0,
@@ -6007,13 +6008,13 @@
       "method": "No per-kW or per-project cash incentive found. The DCED GRID Standards page lists only the PA Permit Fast Track Program, the computer data center equipment sales and use tax exemption, and preferential tax zone programs. Technical.ly's review of the 2026-27 state budget (14 Jul 2026) found no cash incentive either."
     },
     "risk_score": {
-      "value": null,
+      "value": 9.0,
       "low": null,
       "high": null,
       "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
       "last_verified": "2026-10",
-      "basis": "assumed",
-      "method": "Left empty on purpose. The FEMA NRI county file could not be reached from this session, and the us-pa statewide figure (8.74, population-weighted across 67 counties) is on a different footing from the metro entries (Columbus 2.8, Northern Virginia 2.0), so borrowing it would penalise this site unfairly. With no value the ranker drops risk from this site's score and reweights the rest."
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 42095; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Northampton County RISK_SCORE 90.0127, rated Relatively Moderate. 90.0127 / 10 = 9.00. Same method the ingest uses for metro counties, so a rerun reproduces this figure."
     },
     "renewable_pct": {
       "value": 0.03091833031330954,
@@ -6034,13 +6035,13 @@
       "method": "Inherited from us-pa: renewable share + nuclear / total net generation, 2024. Pennsylvania's nuclear fleet is most of this figure."
     },
     "latency_ms_to_hub": {
-      "value": 2.2,
+      "value": 5.2,
       "low": 2.2,
-      "high": 5.1,
+      "high": 5.2,
       "source_url": "https://www.peeringdb.com/api/",
       "last_verified": "2026-10",
       "basis": "modeled",
-      "method": "Same method as the state entries: great-circle distance to the nearest major interconnection hub at 1.4 ms per 100 km plus 1 ms. Site at about 40.90 N, 75.10 W. Nearest hub is the New York / New Jersey metro (Secaucus), about 88 km: 1.4 x 0.88 + 1 = 2.2 ms. High is Equinix Ashburn, about 290 km: 1.4 x 2.90 + 1 = 5.1 ms."
+      "method": "Same method and hub list as the ingest: great-circle to the nearest major IXP in leepr's list (Equinix Ashburn, 302 km from the site at 40.90 N, 75.10 W); intra-continental 1.4 ms per 100 km plus 1 ms = 5.2 ms. Low 2.2 ms is the same formula to the New York / New Jersey exchanges at Secaucus (88 km), which leepr's hub list does not carry. For calibration, the formula gives Columbus 7.2 ms against its measured 8 ms."
     },
     "grid_interconnection_years": {
       "value": 4,

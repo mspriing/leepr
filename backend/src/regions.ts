@@ -47,6 +47,9 @@ export const RegionSchema = z.object({
   grid_interconnection_years:    RegionDriverSchema,
   // parent_state is present on metro regions for fallback lookups
   parent_state:                  z.string().optional(),
+  // A region added for a one-off analysis rather than for the product. The
+  // engine prices it like any other; the frontend's generators leave it out.
+  case_only:                     z.boolean().optional(),
 })
 
 export const RegionsFileSchema = z.record(z.string(), RegionSchema)
