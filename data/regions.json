@@ -5921,6 +5921,137 @@
       "method": "generator interconnection queue duration used as proxy for load connection wait; LBNL does not publish load queue data; PJM median queue duration"
     }
   },
+  "us-pa-northampton": {
+    "label": "Ironwood site: Upper Mount Bethel (Northampton County), PA",
+    "precision": "metro",
+    "parent_state": "us-pa",
+    "power_rate_usd_per_kwh": {
+      "value": 0.0936,
+      "low": 0.0851,
+      "high": 0.1104,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data/",
+      "last_verified": "2026-07",
+      "basis": "sourced",
+      "method": "EIA retail sales API, Pennsylvania, industrial sector. 2025 average computed from the monthly series: $4,354.16M revenue / 46,534.96 million kWh = 9.357 cents per kWh. Low 8.51 cents is the cheapest 2025 month (May). High 11.04 cents is the latest month published, July 2026. Statewide figure; the site sits in PPL Electric territory and a 480 MW load would negotiate its own supply contract."
+    },
+    "water_rate_usd_per_kgal": {
+      "value": 11.843,
+      "low": 11.843,
+      "high": 19.739,
+      "source_url": "https://www.puc.pa.gov/pcdocs/1943572.pdf",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "Pennsylvania-American Water tariff Supplement 70, effective 13 Aug 2026, Rate Zone 1 (the Bangor district serves parts of Upper Mount Bethel). Industrial charge per 100 gallons per month: first 16,000 $1.9739, next 584,000 $1.5199, over 600,000 $1.1843. Times 10 gives $19.74 / $15.20 / $11.84 per 1,000 gal; a data center sits in the top block, so $11.843 is the value. The site has no public water today: the developer's Aug 2026 MOU commits to closed-loop or non-potable cooling, and an earlier plan for the same land used ten wells (WFMZ). This rate is the cost if the campus bought utility water."
+    },
+    "land_cost_per_acre_usd": {
+      "value": 51852,
+      "low": 22546,
+      "high": 350000,
+      "source_url": "https://www.landsearch.com/industrial/northampton-county-pa",
+      "last_verified": "2026-10",
+      "basis": "modeled",
+      "method": "Three sources. Value: LandSearch, Northampton County industrial listings of 10+ acres, 592 Mount Bethel Hwy, Bangor (Slate Belt), 54 acres asking $2,800,000 = $51,852 per acre, the middle of three large listings ($36,957 Wind Gap, $59,574 Lehigh Twp). Low: the same Upper Mount Bethel land was bought from the adjacent power plant by River Pointe Logistics for $17M (WFMZ, Nov 2019); $17M / 754 acres = $22,546 per acre. The 2026 transfer to the Talen joint venture has no reported price. High: CB Commercial NRT 'Lehigh Valley Development Outlook (2026-2035)' prints $350,000-$800,000 per acre for entitled, utility-served secondary industrial zones in northern Northampton; the bottom of that range is used. Modeled because it combines a live asking price with a 2019 sale and a broker range."
+    },
+    "construction_cost_per_kw": {
+      "value": 9800,
+      "low": 8360,
+      "high": 12900,
+      "source_url": "https://reports.turnerandtownsend.com/data-centre-construction-cost-index-2025/data-centre-cost-trends",
+      "last_verified": "2025-11",
+      "basis": "modeled",
+      "method": "Turner & Townsend Data Centre Construction Cost Index 2025-2026 lists no Pennsylvania market. Value uses Columbus, US$9.8 per watt, the nearest inland PJM market in the index, x 1000 = $9,800 per kW. High uses New Jersey, US$12.9 per watt, the nearest market of any kind. Low uses $8,360 per kW, this dataset's own Pennsylvania estimate derived from the state staff cost index (see us-pa in the frontend data). T&T notes liquid-cooled US builds carry a 7-10% premium, which the hybrid design scenario prices separately."
+    },
+    "construction_cost_per_mw": {
+      "value": 9800000,
+      "low": 8360000,
+      "high": 12900000,
+      "source_url": "https://reports.turnerandtownsend.com/data-centre-construction-cost-index-2025/data-centre-cost-trends",
+      "last_verified": "2025-11",
+      "basis": "modeled",
+      "method": "Same figure as construction_cost_per_kw, x 1000. Kept only because every region carries this legacy field; the engine does not read it."
+    },
+    "staff_cost_index": {
+      "value": 1.004,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.bls.gov/oes/special-requests/oesm25st.zip",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "Inherited from us-pa: BLS OEWS May 2025 mean annual wage for SOC 15-1244, 47-2111 and 49-9071, indexed to the national average. The Allentown-Bethlehem-Easton metro series was not pulled."
+    },
+    "tax_rate": {
+      "value": 0.01218,
+      "low": 0.01186,
+      "high": 0.01242,
+      "source_url": "https://www.norcopa.gov/corecode/uploads/document6/uploaded_pdfs/corecode/Bill897-2025%20-%202026%20Real%20Estate%20Tax%20Millage%20Rate_2316.pdf",
+      "last_verified": "2026",
+      "basis": "modeled",
+      "method": "2026 millage: Northampton County 10.8 (Bill 897-2025) + Upper Mount Bethel Township 7.8 (6.8 general + 1.0 fire, read from mytownview.com; the township site could not be opened) + Bangor Area School District 57.04 (mytownview.com) = 75.64 mills on assessed value. Northampton assesses at a base year, so it is converted with the 2026-27 STEB common level ratio factor of 6.21 (CLR = 1/6.21 = 16.10%). 75.64 / 1000 x 0.16103 = 1.218% of market value. Low 1.186% uses township 6.5 and school 56.36 mills; high 1.242% uses township 8.5 and school 57.85 mills. The CLR is a countywide all-property ratio, so a specific commercial parcel may differ."
+    },
+    "tax_abatement_years": {
+      "value": 0,
+      "low": 0,
+      "high": 10,
+      "source_url": "https://www.wfmz.com/news/area/lehighvalley/lou-pektor-prevails-river-pointe-keeps-tax-break-in-upper-mount-bethel/article_b7f90aaa-c16a-11ee-ae87-a78b19396777.html",
+      "last_verified": "2026-08",
+      "basis": "modeled",
+      "method": "A LERTA property-tax abatement (100% in year 1, declining to zero over ten years) covers the former River Pointe land, extended to 31 Dec 2027 by Ordinance 744-2023. Northampton County Council introduced a repeal on 7 May 2026 (outcome not found), and the Aug 2026 MOU dropped a clause to extend it ten more years. It expires before a 2028+ campus would be taxed, so the value is 0; high 10 is the case where it is extended. Pennsylvania's data center incentive is a sales and use tax exemption on equipment (certification valid 25 years; $100M investment and 45 jobs in a county over 250,000 people), not a property tax abatement. The engine reads abatement only from user input, so this field is reference only."
+    },
+    "incentive_usd_per_kw": {
+      "value": 0,
+      "low": 0,
+      "high": 0,
+      "source_url": "https://dced.pa.gov/business-assistance/data-center-resources/grid-standards/",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "No per-kW or per-project cash incentive found. The DCED GRID Standards page lists only the PA Permit Fast Track Program, the computer data center equipment sales and use tax exemption, and preferential tax zone programs. Technical.ly's review of the 2026-27 state budget (14 Jul 2026) found no cash incentive either."
+    },
+    "risk_score": {
+      "value": null,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "assumed",
+      "method": "Left empty on purpose. The FEMA NRI county file could not be reached from this session, and the us-pa statewide figure (8.74, population-weighted across 67 counties) is on a different footing from the metro entries (Columbus 2.8, Northern Virginia 2.0), so borrowing it would penalise this site unfairly. With no value the ranker drops risk from this site's score and reweights the rest."
+    },
+    "renewable_pct": {
+      "value": 0.03091833031330954,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "Inherited from us-pa: hydro + wind + solar + geothermal + biomass / total net generation, 2024. The case's hybrid design adds clean-energy contracts, which this grid-mix figure does not reflect."
+    },
+    "low_carbon_pct": {
+      "value": 0.34315391553184216,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "Inherited from us-pa: renewable share + nuclear / total net generation, 2024. Pennsylvania's nuclear fleet is most of this figure."
+    },
+    "latency_ms_to_hub": {
+      "value": 2.2,
+      "low": 2.2,
+      "high": 5.1,
+      "source_url": "https://www.peeringdb.com/api/",
+      "last_verified": "2026-10",
+      "basis": "modeled",
+      "method": "Same method as the state entries: great-circle distance to the nearest major interconnection hub at 1.4 ms per 100 km plus 1 ms. Site at about 40.90 N, 75.10 W. Nearest hub is the New York / New Jersey metro (Secaucus), about 88 km: 1.4 x 0.88 + 1 = 2.2 ms. High is Equinix Ashburn, about 290 km: 1.4 x 2.90 + 1 = 5.1 ms."
+    },
+    "grid_interconnection_years": {
+      "value": 4,
+      "low": 2,
+      "high": 7,
+      "source_url": "https://www.ecmag.com/magazine/articles/article-detail/how-long-does-it-take-to-power-a-data-center",
+      "last_verified": "2026-08",
+      "basis": "modeled",
+      "method": "Value: Electrical Contractor (17 Aug 2026), citing JLL's 2026 Global Data Center Outlook, puts the national average wait to power a data center at four years, up from 12-18 months in 2022. High: up to seven years in Dominion's Northern Virginia territory, also PJM (Bloomberg via Data Center Knowledge, Aug 2024). Low is an inference, not a published figure: PPL's president told the PA Senate GOP Policy Committee (11 Aug 2025) that construction often begins 6-12 months after a 45-60 day feasibility study. Replaces the 3.2-year LBNL generator-queue proxy every PJM region shares. Amazon dropped this same site in 2025 citing 'the lack of available power' (WFMZ, 29 Apr 2025)."
+    }
+  },
   "us-ri": {
     "label": "Rhode Island, RI",
     "precision": "state",
