@@ -22,13 +22,10 @@
  * Two data views:
  *   stored   every site uses its own entry in data/regions.json.
  *   matched  power price, grid mix and staff cost come from the same statewide
- *            series for all three sites, and hazard risk from the same county
- *            FEMA NRI release. The Columbus and Northern Virginia metro entries
- *            were hand-collected in July: Columbus carries a 5.9 cent power
- *            price against Ohio's 2025 industrial average of 8.52, and both
- *            carry hazard scores (2.8 and 2.0) from an older source on a
- *            different footing from the county NRI scores (9.81 and 7.81)
- *            leepr's own ingest is written to produce.
+ *            series for all three sites. Since the October data fix the stored
+ *            power and grid mix already match; staff cost is the remaining
+ *            difference, because Columbus and Northern Virginia carry metro
+ *            wage indices and Ironwood only a state one.
  *
  * Two designs at Ironwood:
  *   base     the case's base plan.
@@ -40,9 +37,12 @@
  * Three property tax cases:
  *   none     no abatement anywhere (the engine's default).
  *   ohio     Columbus gets a 100% property tax abatement for 15 years, the
- *            terms Microsoft received for its New Albany data center (Axios
- *            Columbus, 17 Oct 2024). Ironwood gets none: its LERTA expires at
- *            the end of 2027 and the Aug 2026 MOU dropped the extension.
+ *            terms New Albany City Council approved for Microsoft's data center
+ *            (WOSU, 2 Oct 2024; Axios Columbus, 17 Oct 2024). Ohio law on local
+ *            abatements is unchanged as of Sept 2026; only the state sales tax
+ *            exemption is paused. Ironwood gets none: its LERTA runs to the end
+ *            of 2027, before the campus would be taxed, and the Aug 2026 MOU
+ *            dropped the extension.
  *   both     Columbus as above, and Ironwood's LERTA extended, which at 10% is
  *            worth about 5 full years (see tax_abatement_years in regions.json).
  */
@@ -74,19 +74,6 @@ export const SITES = {
 } as const
 type SiteId = keyof typeof SITES
 
-/**
- * FEMA National Risk Index county composite scores, data version December 2025
- * (1.20.0), read 2026-10-15 from the FeatureServer behind ArcGIS item
- * 39485e8035d446a5bff03259508ae355, rescaled /10 the way ingest.ts rescales
- * them. Ironwood's comes from regions.json, where it is already stored on this
- * basis; the other two are held here because their regions.json entries still
- * carry the older hand-entered figures.
- */
-const COUNTY_RISK: Record<Exclude<SiteId, 'ironwood'>, number> = {
-  columbus: 9.81,   // Franklin County, OH: RISK_SCORE 98.0598, Relatively High
-  nova:     7.81,   // Loudoun County, VA: RISK_SCORE 78.1170, Relatively Low
-}
-
 function value(regionKey: string, field: string): number {
   const region = loadRegions()[regionKey] as unknown as Record<string, { value: number | null }>
   const v = region?.[field]?.value
@@ -94,7 +81,7 @@ function value(regionKey: string, field: string): number {
   return v
 }
 
-/** Statewide series plus county hazard risk, read live so they never drift from the data. */
+/** Statewide series plus each site's county hazard score, read live so they never drift from the data. */
 function matchedOverrides(id: SiteId): Overrides {
   const state = SITES[id].state
   return {
@@ -102,7 +89,7 @@ function matchedOverrides(id: SiteId): Overrides {
     renewable_pct:          value(state, 'renewable_pct'),
     low_carbon_pct:         value(state, 'low_carbon_pct'),
     staff_cost_index:       value(state, 'staff_cost_index'),
-    risk_score: id === 'ironwood' ? value(SITES.ironwood.region, 'risk_score') : COUNTY_RISK[id],
+    risk_score:             value(SITES[id].region, 'risk_score'),
   }
 }
 

@@ -1,5 +1,43 @@
 # Ironwood Case Runs
 
+## Snapshot 3, 15 October 2026
+
+This snapshot confirms three sources and fixes outdated Columbus and Northern Virginia data inside leepr. Snapshots 1 and 2 further down describe earlier states of the data.
+
+| Tax case | Ironwood base | Hybrid | Columbus | Northern Virginia |
+|---|---|---|---|---|
+| No abatements | $23,392 | $24,442 | $24,137 | $30,604 |
+| Columbus abated | $23,392 | $24,442 | $22,123 | $30,604 |
+| Each abated | $22,930 | $23,939 | $22,123 | $30,604 |
+
+Each figure is the 20-year cost per kW at a 10% discount rate. The Hybrid column is Ironwood under the chief engineer's design.
+
+- With no abatements, Ironwood costs 3.1% less than Columbus because its property tax runs about $55M a year lower.
+- If Columbus receives the 15-year, 100% abatement New Albany gave Microsoft, it costs 5.7% less than Ironwood's base design and 10.5% below the hybrid.
+- An extended LERTA at Ironwood still leaves Columbus 3.6% cheaper.
+- The hybrid design adds about $340M to the build and about $400M over 20 years, which turns Ironwood's 3.1% lead into a 1.3% gap.
+
+### Changes from Snapshot 2
+
+- Upper Mount Bethel's millage is now 8.5 from the township's website, and the Bangor Area School District figure is 57.4 for 2025-26, so Ironwood's tax rate moves from 1.218% to 1.235% of market value.
+- Northampton County withdrew its repeal of the River Pointe LERTA on 21 May 2026, so the abatement stands through the end of 2027.
+- WOSU confirms the Microsoft abatement, and Ohio has not changed its law on local property tax abatements. Governor DeWine paused only the state sales tax exemption.
+- Six metros, Columbus and Northern Virginia among them, plus the ERCOT site carried hand-entered hazard scores on an outdated scale. They now carry FEMA's county scores.
+- Those six metros also now use their state's industrial power price and grid mix. The Columbus figure of 5.9 cents matched Ohio's transportation rate instead of its industrial price of 7.03.
+- After those fixes, leepr's stored data and the matched comparison give nearly the same result for Ironwood and Columbus.
+- The utility serving the site remains unconfirmed, since Met-Ed lists the township and PPL Electric holds a 2026 easement there.
+
+### Sources
+
+- Township millage: https://www.umbt.org/?page_id=1680
+- LERTA repeal withdrawn: WFMZ, 21 May 2026, https://www.wfmz.com/news/area/lehighvalley/northampton-county/northampton-county-extends-protections-for-election-workers/article_37f2d455-0b52-47ab-b2d4-cc559c618036.html
+- Microsoft abatement: WOSU, 2 October 2024, https://www.wosu.org/2024-10-02/new-albany-city-council-approves-15-year-tax-break-for-420-million-microsoft-data-center
+- Ohio sales tax pause: Statehouse News Bureau, 6 August 2026, https://www.statenews.org/government-politics/2026-08-06/dewine-ohio-data-center-tax-break-is-for-next-governor-to-decide-on
+- Industrial power prices: EIA Electric Power Annual, Table 2.10, https://www.eia.gov/electricity/annual/html/epa_02_10.html
+- Met-Ed service area: https://www.firstenergycorp.com/content/dam/customer/get-help/files/PASmartMeter/2018-19-ME-Communities%2002-19-19.pdf
+
+Rerun steps are the same as in Snapshot 2.
+
 ## Snapshot 2, 15 October 2026
 
 These figures come from the `ironwood-case` branch of leepr. The site is entered as `us-pa-northampton`. This snapshot puts county hazard scores on every site, recomputes Ironwood's network latency from the hub list leepr uses everywhere else, and introduces three property tax cases. Snapshot 1 further down describes the data before those changes, so a different number there belongs to that earlier state.

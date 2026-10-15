@@ -4,12 +4,13 @@
     "precision": "metro",
     "parent_state": "us-va",
     "power_rate_usd_per_kwh": {
-      "value": 0.068,
-      "low": 0.06,
-      "high": 0.08,
-      "source_url": "https://www.eia.gov/electricity/state/virginia/",
-      "last_verified": "2025-06",
-      "basis": "sourced"
+      "value": 0.09449999999999999,
+      "low": 0.08990000000000001,
+      "high": 0.09449999999999999,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data?data[]=price&facets[sectorid][]=IND&frequency=annual&api_key=KEY",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state average; no metro-level industrial rate is published by EIA. Replaces a hand-entered 6.8 cents, which sat below the state's own industrial average in every year EIA publishes."
     },
     "water_rate_usd_per_kgal": {
       "value": 7.59,
@@ -81,29 +82,31 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 2,
-      "low": 1.5,
-      "high": 2.8,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 7.81,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 51107; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Loudoun County RISK_SCORE 78.1170. Replaces a hand-entered 2 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
-      "value": 0.2,
-      "low": 0.18,
-      "high": 0.3,
-      "source_url": "https://www.eia.gov/state/virginia",
-      "last_verified": "2025-05",
-      "basis": "sourced"
-    },
-    "low_carbon_pct": {
-      "value": 0.48184729657746606,
+      "value": 0.04567699379392799,
       "low": null,
       "high": null,
       "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
       "last_verified": "2026-07",
       "basis": "modeled",
-      "method": "region renewable_pct is hand-sourced; low_carbon_pct = own renewable_pct (0.2000) + parent state nuclear share (0.2818); parent nuclear derived from parent low_carbon_pct − parent renewable_pct; renewable share + nuclear ÷ total net generation; year 2024"
+      "method": "state-level value (no metro breakdown); sum of hydro + wind + solar + geothermal + biomass ÷ total net generation; year 2024 Replaces a hand-entered 0.2 with no recorded derivation, which did not match EIA's state generation data."
+    },
+    "low_carbon_pct": {
+      "value": 0.327524290371394,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state-level value (no metro breakdown); renewable share + nuclear ÷ total net generation; year 2024"
     },
     "latency_ms_to_hub": {
       "value": 4,
@@ -200,12 +203,13 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 5.8,
-      "low": 5,
-      "high": 6.5,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 9.06,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 48209; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Hays County RISK_SCORE 90.5534. Replaces a hand-entered 5.8 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
       "value": 0.42,
@@ -366,12 +370,13 @@
     "precision": "metro",
     "parent_state": "us-az",
     "power_rate_usd_per_kwh": {
-      "value": 0.042,
-      "low": 0.036,
-      "high": 0.052,
-      "source_url": "https://www.eia.gov/electricity/state/arizona/",
-      "last_verified": "2025-06",
-      "basis": "sourced"
+      "value": 0.081,
+      "low": 0.079,
+      "high": 0.081,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data?data[]=price&facets[sectorid][]=IND&frequency=annual&api_key=KEY",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state average; no metro-level industrial rate is published by EIA. Replaces a hand-entered 4.2 cents, which sat below the state's own industrial average in every year EIA publishes."
     },
     "water_rate_usd_per_kgal": {
       "value": 7.55,
@@ -443,29 +448,31 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 3.2,
-      "low": 2.5,
-      "high": 4,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 9.99,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 04013; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Maricopa County RISK_SCORE 99.8728. Replaces a hand-entered 3.2 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
-      "value": 0.3,
-      "low": 0.26,
-      "high": 0.38,
-      "source_url": "https://www.eia.gov/state/arizona",
-      "last_verified": "2025-05",
-      "basis": "sourced"
-    },
-    "low_carbon_pct": {
-      "value": 0.5791441173302194,
+      "value": 0.06928335542210694,
       "low": null,
       "high": null,
       "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
       "last_verified": "2026-07",
       "basis": "modeled",
-      "method": "region renewable_pct is hand-sourced; low_carbon_pct = own renewable_pct (0.3000) + parent state nuclear share (0.2791); parent nuclear derived from parent low_carbon_pct − parent renewable_pct; renewable share + nuclear ÷ total net generation; year 2024"
+      "method": "state-level value (no metro breakdown); sum of hydro + wind + solar + geothermal + biomass ÷ total net generation; year 2024 Replaces a hand-entered 0.3 with no recorded derivation, which did not match EIA's state generation data."
+    },
+    "low_carbon_pct": {
+      "value": 0.3484274727523264,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state-level value (no metro breakdown); renewable share + nuclear ÷ total net generation; year 2024"
     },
     "latency_ms_to_hub": {
       "value": 14,
@@ -490,12 +497,13 @@
     "precision": "metro",
     "parent_state": "us-tx",
     "power_rate_usd_per_kwh": {
-      "value": 0.038,
-      "low": 0.03,
-      "high": 0.05,
-      "source_url": "https://www.eia.gov/electricity/state/texas/",
-      "last_verified": "2025-06",
-      "basis": "sourced"
+      "value": 0.0655,
+      "low": 0.061200000000000004,
+      "high": 0.0655,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data?data[]=price&facets[sectorid][]=IND&frequency=annual&api_key=KEY",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state average; no metro-level industrial rate is published by EIA. Replaces a hand-entered 3.8 cents, which sat below the state's own industrial average in every year EIA publishes."
     },
     "water_rate_usd_per_kgal": {
       "value": 5.04,
@@ -567,29 +575,31 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 5.1,
-      "low": 4.5,
-      "high": 6,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 9.94,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 48029; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Bexar County RISK_SCORE 99.4275. Replaces a hand-entered 5.1 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
-      "value": 0.28,
-      "low": 0.22,
-      "high": 0.4,
-      "source_url": "https://www.eia.gov/state/texas",
-      "last_verified": "2025-05",
-      "basis": "sourced"
-    },
-    "low_carbon_pct": {
-      "value": 0.34816052048134416,
+      "value": 0.22236556840903388,
       "low": null,
       "high": null,
       "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
       "last_verified": "2026-07",
       "basis": "modeled",
-      "method": "region renewable_pct is hand-sourced; low_carbon_pct = own renewable_pct (0.2800) + parent state nuclear share (0.0682); parent nuclear derived from parent low_carbon_pct − parent renewable_pct; renewable share + nuclear ÷ total net generation; year 2024"
+      "method": "state-level value (no metro breakdown); sum of hydro + wind + solar + geothermal + biomass ÷ total net generation; year 2024 Replaces a hand-entered 0.28 with no recorded derivation, which did not match EIA's state generation data."
+    },
+    "low_carbon_pct": {
+      "value": 0.290526088890378,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state-level value (no metro breakdown); renewable share + nuclear ÷ total net generation; year 2024"
     },
     "latency_ms_to_hub": {
       "value": 18,
@@ -614,12 +624,13 @@
     "precision": "metro",
     "parent_state": "us-or",
     "power_rate_usd_per_kwh": {
-      "value": 0.052,
-      "low": 0.046,
-      "high": 0.062,
-      "source_url": "https://www.eia.gov/electricity/state/oregon/",
-      "last_verified": "2025-06",
-      "basis": "sourced"
+      "value": 0.0828,
+      "low": 0.0805,
+      "high": 0.0828,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data?data[]=price&facets[sectorid][]=IND&frequency=annual&api_key=KEY",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state average; no metro-level industrial rate is published by EIA. Replaces a hand-entered 5.2 cents, which sat below the state's own industrial average in every year EIA publishes."
     },
     "water_rate_usd_per_kgal": {
       "value": 11.81,
@@ -691,29 +702,31 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 4.5,
-      "low": 3.8,
-      "high": 5.5,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 9.85,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 41051; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Multnomah County RISK_SCORE 98.4733. Replaces a hand-entered 4.5 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
-      "value": 0.71,
-      "low": 0.65,
-      "high": 0.78,
-      "source_url": "https://www.eia.gov/state/oregon",
-      "last_verified": "2025-05",
-      "basis": "sourced"
-    },
-    "low_carbon_pct": {
-      "value": 0.71,
+      "value": 0.5831558867661217,
       "low": null,
       "high": null,
       "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
       "last_verified": "2026-07",
       "basis": "modeled",
-      "method": "region renewable_pct is hand-sourced; low_carbon_pct = own renewable_pct (0.7100) + parent state nuclear share (0.0000); parent nuclear derived from parent low_carbon_pct − parent renewable_pct; renewable share + nuclear ÷ total net generation; year 2024"
+      "method": "state-level value (no metro breakdown); sum of hydro + wind + solar + geothermal + biomass ÷ total net generation; year 2024 Replaces a hand-entered 0.71 with no recorded derivation, which did not match EIA's state generation data."
+    },
+    "low_carbon_pct": {
+      "value": 0.5831558867661217,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state-level value (no metro breakdown); renewable share + nuclear ÷ total net generation; year 2024"
     },
     "latency_ms_to_hub": {
       "value": 10,
@@ -738,12 +751,13 @@
     "precision": "metro",
     "parent_state": "us-oh",
     "power_rate_usd_per_kwh": {
-      "value": 0.059,
-      "low": 0.052,
-      "high": 0.07,
-      "source_url": "https://www.eia.gov/electricity/state/ohio/",
-      "last_verified": "2025-06",
-      "basis": "sourced"
+      "value": 0.0852,
+      "low": 0.071,
+      "high": 0.0852,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data?data[]=price&facets[sectorid][]=IND&frequency=annual&api_key=KEY",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state average; no metro-level industrial rate is published by EIA. Replaces a hand-entered 5.9 cents, which sat below the state's own industrial average in every year EIA publishes. The July figure of 5.9 cents matches EIA's 2023 Ohio transportation price rather than its industrial price (7.03 cents)."
     },
     "water_rate_usd_per_kgal": {
       "value": 8.84,
@@ -815,29 +829,31 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 2.8,
-      "low": 2.2,
-      "high": 3.6,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 9.81,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 39049; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Franklin County RISK_SCORE 98.0598. Replaces a hand-entered 2.8 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
-      "value": 0.14,
-      "low": 0.11,
-      "high": 0.2,
-      "source_url": "https://www.eia.gov/state/ohio",
-      "last_verified": "2025-05",
-      "basis": "sourced"
-    },
-    "low_carbon_pct": {
-      "value": 0.2657261025694001,
+      "value": 0.025087402016828325,
       "low": null,
       "high": null,
       "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
       "last_verified": "2026-07",
       "basis": "modeled",
-      "method": "region renewable_pct is hand-sourced; low_carbon_pct = own renewable_pct (0.1400) + parent state nuclear share (0.1257); parent nuclear derived from parent low_carbon_pct − parent renewable_pct; renewable share + nuclear ÷ total net generation; year 2024"
+      "method": "state-level value (no metro breakdown); sum of hydro + wind + solar + geothermal + biomass ÷ total net generation; year 2024 Replaces a hand-entered 0.14 with no recorded derivation, which did not match EIA's state generation data."
+    },
+    "low_carbon_pct": {
+      "value": 0.15081350458622841,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state-level value (no metro breakdown); renewable share + nuclear ÷ total net generation; year 2024"
     },
     "latency_ms_to_hub": {
       "value": 8,
@@ -862,12 +878,13 @@
     "precision": "metro",
     "parent_state": "us-ga",
     "power_rate_usd_per_kwh": {
-      "value": 0.063,
-      "low": 0.056,
-      "high": 0.074,
-      "source_url": "https://www.eia.gov/electricity/state/georgia/",
-      "last_verified": "2025-06",
-      "basis": "sourced"
+      "value": 0.0781,
+      "low": 0.0721,
+      "high": 0.0781,
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data?data[]=price&facets[sectorid][]=IND&frequency=annual&api_key=KEY",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state average; no metro-level industrial rate is published by EIA. Replaces a hand-entered 6.3 cents, which sat below the state's own industrial average in every year EIA publishes."
     },
     "water_rate_usd_per_kgal": {
       "value": 8.24,
@@ -939,29 +956,31 @@
       "basis": "sourced"
     },
     "risk_score": {
-      "value": 3.8,
-      "low": 3,
-      "high": 4.8,
-      "source_url": "https://hazards.fema.gov/nri/map",
-      "last_verified": "2024-12",
-      "basis": "sourced"
+      "value": 9.58,
+      "low": null,
+      "high": null,
+      "source_url": "https://hub.arcgis.com/api/download/v1/items/39485e8035d446a5bff03259508ae355/csv?redirect=true&layers=0",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "FEMA NRI Score composite; county FIPS 13121; rescaled /10; FEMA NRI (US) and ThinkHazard (international) are different frameworks on different scales; normalized into one column, so comparability is approximate. Read 2026-10-15 from the FeatureServer behind this ArcGIS item (NRI data version December 2025, 1.20.0): Fulton County RISK_SCORE 95.8015. Replaces a hand-entered 3.8 from the old NRI map page, which sat on a different scale from every other US region and blocked the ingest from writing this figure."
     },
     "renewable_pct": {
-      "value": 0.13,
-      "low": 0.1,
-      "high": 0.18,
-      "source_url": "https://www.eia.gov/state/georgia",
-      "last_verified": "2025-05",
-      "basis": "sourced"
-    },
-    "low_carbon_pct": {
-      "value": 0.47316163072608575,
+      "value": 0.059420496467272384,
       "low": null,
       "high": null,
       "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
       "last_verified": "2026-07",
       "basis": "modeled",
-      "method": "region renewable_pct is hand-sourced; low_carbon_pct = own renewable_pct (0.1300) + parent state nuclear share (0.3432); parent nuclear derived from parent low_carbon_pct − parent renewable_pct; renewable share + nuclear ÷ total net generation; year 2024"
+      "method": "state-level value (no metro breakdown); sum of hydro + wind + solar + geothermal + biomass ÷ total net generation; year 2024 Replaces a hand-entered 0.13 with no recorded derivation, which did not match EIA's state generation data."
+    },
+    "low_carbon_pct": {
+      "value": 0.4025821271933581,
+      "low": null,
+      "high": null,
+      "source_url": "https://www.eia.gov/electricity/data/state/annual_generation_state.xls",
+      "last_verified": "2026-07",
+      "basis": "modeled",
+      "method": "state-level value (no metro breakdown); renewable share + nuclear ÷ total net generation; year 2024"
     },
     "latency_ms_to_hub": {
       "value": 7,
@@ -5933,7 +5952,7 @@
       "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data/",
       "last_verified": "2026-07",
       "basis": "sourced",
-      "method": "EIA retail sales API, Pennsylvania, industrial sector. 2025 average computed from the monthly series: $4,354.16M revenue / 46,534.96 million kWh = 9.357 cents per kWh. Low 8.51 cents is the cheapest 2025 month (May). High 11.04 cents is the latest month published, July 2026. Statewide figure; the site sits in PPL Electric territory and a 480 MW load would negotiate its own supply contract."
+      "method": "EIA retail sales API, Pennsylvania, industrial sector. 2025 average computed from the monthly series: $4,354.16M revenue / 46,534.96 million kWh = 9.357 cents per kWh. Low 8.51 cents is the cheapest 2025 month (May). High 11.04 cents is the latest month published, July 2026. Statewide figure. Met-Ed (FirstEnergy) lists Upper Mount Bethel among its communities and PPL Electric holds a 2026 easement in the township, so the serving utility for the site is not confirmed, and a 480 MW load would negotiate its own supply contract."
     },
     "water_rate_usd_per_kgal": {
       "value": 11.843,
@@ -5981,13 +6000,13 @@
       "method": "Inherited from us-pa: BLS OEWS May 2025 mean annual wage for SOC 15-1244, 47-2111 and 49-9071, indexed to the national average. The Allentown-Bethlehem-Easton metro series was not pulled."
     },
     "tax_rate": {
-      "value": 0.01218,
-      "low": 0.01186,
-      "high": 0.01242,
-      "source_url": "https://www.norcopa.gov/corecode/uploads/document6/uploaded_pdfs/corecode/Bill897-2025%20-%202026%20Real%20Estate%20Tax%20Millage%20Rate_2316.pdf",
-      "last_verified": "2026",
+      "value": 0.01235,
+      "low": 0.01218,
+      "high": 0.01248,
+      "source_url": "https://www.umbt.org/?page_id=1680",
+      "last_verified": "2026-10",
       "basis": "modeled",
-      "method": "2026 millage: Northampton County 10.8 (Bill 897-2025) + Upper Mount Bethel Township 7.8 (6.8 general + 1.0 fire, read from mytownview.com; the township site could not be opened) + Bangor Area School District 57.04 (mytownview.com) = 75.64 mills on assessed value. Northampton assesses at a base year, so it is converted with the 2026-27 STEB common level ratio factor of 6.21 (CLR = 1/6.21 = 16.10%). 75.64 / 1000 x 0.16103 = 1.218% of market value. Low 1.186% uses township 6.5 and school 56.36 mills; high 1.242% uses township 8.5 and school 57.85 mills. The CLR is a countywide all-property ratio, so a specific commercial parcel may differ."
+      "method": "Millage on assessed value: Northampton County 10.8 (Bill 897-2025, 2026) + Upper Mount Bethel Township 8.5 (the township's Finance / Taxes page, 'UMBT Millage Rate is 8.5', which includes the 1.0 mill fire tax set by Ord. 2017-03) + Bangor Area School District 57.4 (2025-26, NookLocal; the district's own budget files could not be opened) = 76.70 mills. Northampton assesses at a base year, so it is converted with the 2026-27 STEB common level ratio factor of 6.21 (CLR = 1/6.21 = 16.10%). 76.70 / 1000 x 0.16103 = 1.235% of market value. Low 1.218% uses the 56.36 school figure on Washington Township's finance page; high 1.248% adds a 0.81 mill community college line listed by mytownview.com. The CLR is a countywide all-property ratio, so a specific commercial parcel may differ."
     },
     "tax_abatement_years": {
       "value": 0,
@@ -5996,7 +6015,7 @@
       "source_url": "https://www.wfmz.com/news/area/lehighvalley/lou-pektor-prevails-river-pointe-keeps-tax-break-in-upper-mount-bethel/article_b7f90aaa-c16a-11ee-ae87-a78b19396777.html",
       "last_verified": "2026-08",
       "basis": "modeled",
-      "method": "A LERTA property-tax abatement (100% in year 1, declining to zero over ten years) covers the former River Pointe land, extended to 31 Dec 2027 by Ordinance 744-2023. Northampton County Council introduced a repeal on 7 May 2026 (outcome not found), and the Aug 2026 MOU dropped a clause to extend it ten more years. It expires before a 2028+ campus would be taxed, so the value is 0. High 5 is the case where it is extended: at a 10% discount rate a ten-year schedule declining from 100% is worth 3.86 years of full abatement, closest to 5 full years (3.79), the integer the engine accepts. Pennsylvania's data center incentive is a sales and use tax exemption on equipment (certification valid 25 years; $100M investment and 45 jobs in a county over 250,000 people), not a property tax abatement. The engine reads abatement only from user input, so this field is reference only."
+      "method": "A LERTA property-tax abatement (100% in year 1, declining to zero over ten years) covers the former River Pointe land, extended to 31 Dec 2027 by Ordinance 744-2023. Northampton County Council introduced a repeal on 7 May 2026 and withdrew it on 21 May 2026 (WFMZ, 21 May 2026), so the LERTA stands, and the Aug 2026 MOU dropped a clause to extend it ten more years. It expires before a 2028+ campus would be taxed, so the value is 0. High 5 is the case where it is extended: at a 10% discount rate a ten-year schedule declining from 100% is worth 3.86 years of full abatement, closest to 5 full years (3.79), the integer the engine accepts. Pennsylvania's data center incentive is a sales and use tax exemption on equipment (certification valid 25 years; $100M investment and 45 jobs in a county over 250,000 people), not a property tax abatement. The engine reads abatement only from user input, so this field is reference only."
     },
     "incentive_usd_per_kw": {
       "value": 0,

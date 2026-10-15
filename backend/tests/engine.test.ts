@@ -550,8 +550,16 @@ describe('runEngine (hero sites fixture)', () => {
       ),
     }
     const out = await runEngine(inputWithOverride, opts)
-    // ERCOT with near-zero power cost should easily be rank-1
-    expect(out.sites['ercot'].rank).toBe(1)
+    // The override replaces the regional power rate outright, so ERCOT's power
+    // bill falls to the near-zero rate and ERCOT becomes the cheapest site.
+    // (Rank is not asserted: since the October 2026 hazard fix ERCOT carries
+    // Hays County's FEMA score, so cost alone no longer decides first place.)
+    const ercot = out.sites['ercot']
+    expect(ercot.opex_annual.power_usd).toBeLessThan(
+      out.sites['nordic'].opex_annual.power_usd / 10,
+    )
+    const npvs = Object.values(out.sites).map((s) => s.finance.npv_usd)
+    expect(ercot.finance.npv_usd).toBe(Math.max(...npvs))
   })
 
   it('site_labels maps each submitted site_id to its display label', async () => {
@@ -957,21 +965,24 @@ describe('hero fixture exact scores and flip point (Part 2e)', () => {
     // Regional incentive metadata is not treated as an automatic property-tax
     // holiday. ERCOT therefore carries tax from year 1 unless the candidate
     // explicitly supplies a negotiated abatement.
-    expect(out.sites['nordic'].weighted_score).toBeCloseTo(0.698, 2)
-    expect(out.sites['ercot'].weighted_score).toBeCloseTo(0.622, 2)
-    expect(out.sites['nova'].weighted_score).toBeCloseTo(0.315, 2)
+    // Updated October 2026, when Northern Virginia and ERCOT moved from
+    // hand-entered hazard scores to their FEMA NRI county figures and Northern
+    // Virginia to the state industrial power price. The order did not change.
+    expect(out.sites['nordic'].weighted_score).toBeCloseTo(0.730, 2)
+    expect(out.sites['ercot'].weighted_score).toBeCloseTo(0.640, 2)
+    expect(out.sites['nova'].weighted_score).toBeCloseTo(0.182, 2)
 
     expect(out.sites['nordic'].rank).toBe(1)
     expect(out.sites['ercot'].rank).toBe(2)
     expect(out.sites['nova'].rank).toBe(3)
 
-    // Ranking flips when Nordic construction cost rises by roughly 10%.
+    // Ranking flips when Nordic construction cost rises by roughly 15%.
     const constructionFlip = out.sensitivity.find(
       (s) => s.driver === 'construction_cost_per_kw' && !s.stable,
     )
     expect(constructionFlip).toBeDefined()
-    expect(constructionFlip!.pct_change).toBeGreaterThan(9)
-    expect(constructionFlip!.pct_change).toBeLessThan(12)
+    expect(constructionFlip!.pct_change).toBeGreaterThan(14)
+    expect(constructionFlip!.pct_change).toBeLessThan(17)
   })
 
   it('provenance includes basis field on every item from regions.json', async () => {

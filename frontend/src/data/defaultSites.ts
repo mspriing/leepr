@@ -14,10 +14,10 @@ export const DEFAULT_SITES: NamedSite[] = [
   },
   {
     key: 'us-tx-ercot', label: 'Texas ERCOT', place: 'Hays County, Texas',
-    base: { powerRate: 0.038, waterRate: 3.2, landCostPerAcre: 55000, constructionPerKw: 9540, staffIndex: 0.96, taxRate: 0.019, taxAbatementYears: 10, incentivePerKw: 220, riskScore: 5.8, renewablePct: 0.42, latencyMs: 22, gridWaitYears: null },
+    base: { powerRate: 0.038, waterRate: 3.2, landCostPerAcre: 55000, constructionPerKw: 9540, staffIndex: 0.96, taxRate: 0.019, taxAbatementYears: 10, incentivePerKw: 220, riskScore: 9.06, renewablePct: 0.42, latencyMs: 22, gridWaitYears: null },
   },
   {
     key: 'us-va-northern', label: 'Northern Virginia', place: 'Loudoun County, Virginia',
-    base: { powerRate: 0.068, waterRate: 7.59, landCostPerAcre: 4400000, constructionPerKw: 10920, staffIndex: 1.18, taxRate: 0.0081, taxAbatementYears: 9, incentivePerKw: 50, riskScore: 2, renewablePct: 0.2, latencyMs: 4, gridWaitYears: 3.2 },
+    base: { powerRate: 0.09449999999999999, waterRate: 7.59, landCostPerAcre: 4400000, constructionPerKw: 10920, staffIndex: 1.18, taxRate: 0.0081, taxAbatementYears: 9, incentivePerKw: 50, riskScore: 7.81, renewablePct: 0.04567699379392799, latencyMs: 4, gridWaitYears: 3.2 },
   },
 ]

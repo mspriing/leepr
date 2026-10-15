@@ -94,8 +94,8 @@ Build `/tmp/req.json` from the Zod schema, not guesswork. The hero fixture:
 }
 ```
 
-Expected ranking: Nordic 0.672 → ERCOT 0.622 → Northern Virginia 0.315.
-The ranking flips when Nordic construction cost rises ~8% above today's figure.
+Expected ranking: Nordic 0.730 → ERCOT 0.640 → Northern Virginia 0.182.
+The ranking flips when Nordic construction cost rises ~15% above today's figure.
 
 ---
 
