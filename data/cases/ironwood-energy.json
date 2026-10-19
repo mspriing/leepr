@@ -1,0 +1,175 @@
+{
+  "_note": "Inputs for backend/src/scripts/ironwoodEnergy.ts. Every value carries its source, date and working.",
+  "params": {
+    "phase1_mw": {
+      "value": 480,
+      "low": null,
+      "high": null,
+      "unit": "MW",
+      "source_url": "https://www.datacenterdynamics.com/en/news/talen-looks-to-develop-23-building-data-center-campus-in-pennsylvania/",
+      "last_verified": "2026-07",
+      "basis": "sourced",
+      "method": "The case gives a 480 MW initial substation; the real Upper Mount Bethel filings show a 480 MW on-site substation."
+    },
+    "full_build_mw": {
+      "value": 2000,
+      "low": null,
+      "high": null,
+      "unit": "MW",
+      "source_url": "https://www.wfmz.com/news/area/lehighvalley/northampton-county/slate-belt/upper-mount-bethel-reviews-memorandum-of-understanding-from-data-center-developer/article_30ba9643-9805-4513-9394-1f31c4164572.html",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "The case gives up to 2,000 MW at full build; the real MOU targets 2 gigawatts."
+    },
+    "load_factor": {
+      "value": 1.0,
+      "low": null,
+      "high": null,
+      "unit": "share of peak",
+      "source_url": "https://github.com/mspriing/leepr",
+      "last_verified": "2026-10",
+      "basis": "assumed",
+      "method": "The campus is taken to draw its full peak in every hour, the same convention leepr's cost runs use, so the two sets of figures agree. A real campus averages somewhat less, which would scale every annual figure down in proportion."
+    },
+    "discount_rate": {
+      "value": 0.1,
+      "low": null,
+      "high": null,
+      "unit": "per year",
+      "source_url": "https://github.com/mspriing/leepr",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "KGE's 10% investment threshold, from the case."
+    },
+    "gas_capex_usd_per_kw": {
+      "value": 1810,
+      "low": 1700,
+      "high": 2400,
+      "unit": "USD per kW",
+      "source_url": "https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capital_cost_AEO2020.pdf",
+      "last_verified": "2019",
+      "basis": "sourced",
+      "method": "Onsite gas is priced as a reciprocating engine plant, the technology data centers buy for islanded supply (Wärtsilä's 412 MW, 40-engine order for an Ohio hyperscale campus, Power Engineering 16 Apr 2026). EIA AEO2020 capital cost report, Case 4, four 5.6 MW engines: $1,810/kW in 2019 dollars, the latest EIA engine case. Low $1,700/kW is the Wärtsilä 18V50SG screening cost in NYISO's 2025-2029 demand curve reset (Burns & McDonnell, Dec 2023). High $2,400/kW is the market quote S&P Global reported for new gas plants in May 2025."
+    },
+    "gas_heat_rate_btu_per_kwh": {
+      "value": 8295,
+      "low": null,
+      "high": null,
+      "unit": "Btu per kWh",
+      "source_url": "https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capital_cost_AEO2020.pdf",
+      "last_verified": "2019",
+      "basis": "sourced",
+      "method": "EIA AEO2020 Case 4 reciprocating engines, 8,295 Btu/kWh. NYISO's Wärtsilä 18V50SG screening figure agrees at 8,290 Btu/kWh HHV."
+    },
+    "gas_fixed_om_usd_per_kw_yr": {
+      "value": 35.16,
+      "low": null,
+      "high": null,
+      "unit": "USD per kW-year",
+      "source_url": "https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capital_cost_AEO2020.pdf",
+      "last_verified": "2019",
+      "basis": "sourced",
+      "method": "EIA AEO2020 Case 4 reciprocating engines."
+    },
+    "gas_variable_om_usd_per_mwh": {
+      "value": 5.69,
+      "low": null,
+      "high": null,
+      "unit": "USD per MWh",
+      "source_url": "https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capital_cost_AEO2020.pdf",
+      "last_verified": "2019",
+      "basis": "sourced",
+      "method": "EIA AEO2020 Case 4 reciprocating engines."
+    },
+    "gas_plant_life_years": {
+      "value": 20,
+      "low": null,
+      "high": null,
+      "unit": "years",
+      "source_url": "https://github.com/mspriing/leepr",
+      "last_verified": "2026-10",
+      "basis": "assumed",
+      "method": "Recovered over the customer's 20-year power agreement rather than Lazard's 30-year plant life, because the plant exists to serve that contract."
+    },
+    "gas_redundancy_factor": {
+      "value": 1.15,
+      "low": null,
+      "high": null,
+      "unit": "installed MW per MW of load",
+      "source_url": "https://www.power-eng.com/gas/data-center-power-crunch-lifts-engines-aeroderivatives-into-larger-role/",
+      "last_verified": "2026-04",
+      "basis": "assumed",
+      "method": "An islanded campus needs spare engines so one can be down for maintenance or a fault without dropping load. 15% spare capacity is an assumption; no published standard was found."
+    },
+    "gas_capacity_factor": {
+      "value": 1.0,
+      "low": null,
+      "high": null,
+      "unit": "share",
+      "source_url": "https://github.com/mspriing/leepr",
+      "last_verified": "2026-10",
+      "basis": "assumed",
+      "method": "Delivered energy per kW of campus load, equal to the load factor."
+    },
+    "gas_price_usd_per_mmbtu": {
+      "value": 3.48,
+      "low": 3.16,
+      "high": 8.86,
+      "unit": "USD per MMBtu",
+      "source_url": "https://www.eia.gov/outlooks/steo/report/natgas.php",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "EIA Short-Term Energy Outlook (6 Oct 2026) Henry Hub forecast for 2026, $3.48/MMBtu. Low is the 2027 forecast, $3.16. High is the price Pennsylvania industrial users paid in 2024, $9.19/Mcf (EIA), divided by 1.037 MMBtu per Mcf = $8.86/MMBtu. A plant tapping an interstate pipeline in eastern Pennsylvania would pay between the two."
+    },
+    "gas_co2_lb_per_mmbtu": {
+      "value": 116.65,
+      "low": null,
+      "high": null,
+      "unit": "lb CO2 per MMBtu",
+      "source_url": "https://www.eia.gov/environment/emissions/co2_vol_mass.php",
+      "last_verified": "2024-09",
+      "basis": "sourced",
+      "method": "EIA carbon dioxide emissions coefficient for natural gas, 116.65 lb CO2/MMBtu. EPA's 2025 factor (53.06 kg = 117.0 lb) agrees."
+    },
+    "gas_years_to_power": {
+      "value": 2.5,
+      "low": 2,
+      "high": 5,
+      "unit": "years",
+      "source_url": "https://www.power-eng.com/gas/data-center-power-crunch-lifts-engines-aeroderivatives-into-larger-role/",
+      "last_verified": "2026-04",
+      "basis": "modeled",
+      "method": "Wärtsilä's 412 MW engine order for an Ohio data center, placed in April 2026, targets commercial operation in early 2028, about two years. Value adds half a year for Pennsylvania air permitting. Low 2 years is that Ohio schedule. High 5 years is the average wait for a large gas turbine in 2025 (Wood Mackenzie via Utility Dive, 24 Feb 2026), the fallback if engines are not used."
+    },
+    "battery_capex_usd_per_kwh": {
+      "value": 334,
+      "low": 207,
+      "high": 365,
+      "unit": "USD per kWh",
+      "source_url": "https://docs.nrel.gov/docs/fy25osti/93281.pdf",
+      "last_verified": "2025-06",
+      "basis": "sourced",
+      "method": "NREL, Cost Projections for Utility-Scale Battery Storage: 2025 Update, 4-hour system in 2024: $334/kWh (2024$). Low is NREL's 2030 low projection, $207/kWh. High is the top of Lazard LCOS 2026's initial capital range, $365/kWh."
+    },
+    "battery_life_years": {
+      "value": 15,
+      "low": null,
+      "high": null,
+      "unit": "years",
+      "source_url": "https://atb.nrel.gov/electricity/2024/utility-scale_battery_storage",
+      "last_verified": "2024",
+      "basis": "sourced",
+      "method": "NREL ATB 2024: 15-year lifetime, 85% round-trip efficiency."
+    },
+    "battery_fixed_om_share": {
+      "value": 0.025,
+      "low": null,
+      "high": null,
+      "unit": "share of capital per year",
+      "source_url": "https://atb.nrel.gov/electricity/2024/utility-scale_battery_storage",
+      "last_verified": "2024",
+      "basis": "sourced",
+      "method": "NREL ATB 2024: fixed O&M at 2.5% of capital cost per year."
+    }
+  }
+}
