@@ -170,6 +170,156 @@
       "last_verified": "2024",
       "basis": "sourced",
       "method": "NREL ATB 2024: fixed O&M at 2.5% of capital cost per year."
+    },
+    "grid_price_usd_per_mwh": {
+      "value": 93.6,
+      "low": 85.1,
+      "high": 110.4,
+      "unit": "USD per MWh",
+      "source_url": "https://api.eia.gov/v2/electricity/retail-sales/data/",
+      "last_verified": "2026-07",
+      "basis": "sourced",
+      "method": "The same Pennsylvania industrial average leepr uses for Ironwood: 9.36 cents per kWh in 2025 (EIA). Low 8.51 cents is the cheapest 2025 month; high 11.04 cents is July 2026, the latest month published. A retail industrial rate already includes energy, capacity and delivery."
+    },
+    "grid_connection_years": {
+      "value": 4,
+      "low": 2,
+      "high": 7,
+      "unit": "years",
+      "source_url": "https://www.ecmag.com/magazine/articles/article-detail/how-long-does-it-take-to-power-a-data-center",
+      "last_verified": "2026-08",
+      "basis": "modeled",
+      "method": "Read from the us-pa-northampton entry of regions.json so the two models agree. Value: Electrical Contractor (17 Aug 2026), citing JLL's 2026 Global Data Center Outlook, puts the national average wait to power a data center at four years, up from 12-18 months in 2022. High: up to seven years in Dominion's Northern Virginia territory, also PJM (Bloomberg via Data Center Knowledge, Aug 2024). Low is an inference, not a published figure: PPL's president told the PA Senate GOP Policy Committee (11 Aug 2025) that construction often begins 6-12 months after a 45-60 day feasibility study. Replaces the 3.2-year LBNL generator-queue proxy every PJM region shares. Amazon dropped this same site in 2025 citing 'the lack of available power' (WFMZ, 29 Apr 2025)."
+    },
+    "grid_co2_lb_per_mwh": {
+      "value": 596.9,
+      "low": null,
+      "high": 1175.6,
+      "unit": "lb CO2 per MWh",
+      "source_url": "https://www.epa.gov/system/files/documents/2025-06/summary_tables_rev2.pdf",
+      "last_verified": "2025-06",
+      "basis": "sourced",
+      "method": "EPA eGRID2023 (Rev 2, Jun 2025), RFC East subregion, CO2 total output emission rate 596.9 lb/MWh. High is the same table's non-baseload rate, 1,175.6 lb/MWh, which describes the plants that ramp up to serve new load and is the better guide to what an added campus actually causes."
+    },
+    "capacity_price_usd_per_mw_day": {
+      "value": 325.0,
+      "low": 269.92,
+      "high": 333.44,
+      "unit": "USD per MW-day",
+      "source_url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf",
+      "last_verified": "2026-07",
+      "basis": "sourced",
+      "method": "PJM Base Residual Auction for 2028/29, the first year Ironwood could plausibly take power: PPL zone and RTO cleared at $325.00/MW-day, the price cap. Low is 2025/26 at $269.92; high is 2027/28 at $333.44, also the cap. Met-Ed takes the MAAC price, equal to the RTO price in every one of these auctions."
+    },
+    "wholesale_energy_usd_per_mwh": {
+      "value": 50.73,
+      "low": 33.74,
+      "high": 74.06,
+      "unit": "USD per MWh",
+      "source_url": "https://www.pjm.com/-/media/DotCom/committees-groups/committees/mc/2026/20260424-special/2025-annual-state-of-the-market-report-for-pjm.pdf",
+      "last_verified": "2026-04",
+      "basis": "sourced",
+      "method": "PJM Independent Market Monitor, 2025 State of the Market: load-weighted average real-time LMP $50.73/MWh in 2025. Low is 2024, $33.74. High is January to August 2026, $74.06 (IMM presentation, 28 Sep 2026)."
+    },
+    "ppa_price_usd_per_mwh": {
+      "value": 81.03,
+      "low": 52.65,
+      "high": 83.79,
+      "unit": "USD per MWh",
+      "source_url": "https://pv-magazine-usa.com/2026/01/30/uncertainty-looms-as-solar-ppa-prices-climb-for-second-straight-quarter/",
+      "last_verified": "2026-01",
+      "basis": "sourced",
+      "method": "LevelTen Energy PPA Price Index, PJM solar P25 in Q4 2025: $81.03/MWh, as reported by pv magazine USA (30 Jan 2026). No PJM figure for a 2026 quarter is public. Low is LevelTen's North American solar P25 for Q2 2026, $52.65; high is the Q2 2026 market-averaged wind index, $83.79 (pv-tech, 23 Jul 2026). Solar is used as the available benchmark; it is not the clean firm power the GRID standard asks for, which no public price index covers."
+    },
+    "clean_contract_share": {
+      "value": 0.32,
+      "low": null,
+      "high": null,
+      "unit": "share of annual energy",
+      "source_url": "https://dced.pa.gov/business-assistance/data-center-resources/grid-standards/",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "Sized to the 32% clean firm share Pennsylvania's GRID Standards require from 1 Jan 2035, so the contracted share meets the state's final step from the start."
+    },
+    "clean_firm_2027": {
+      "value": 0.1,
+      "low": null,
+      "high": null,
+      "unit": "share of annual energy",
+      "source_url": "https://dced.pa.gov/business-assistance/data-center-resources/grid-standards/",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "PA GRID Standards: incremental capacity located in the same PJM deliverability area must include clean firm energy of 10.0% beginning 1 January 2027. The page does not define clean firm."
+    },
+    "clean_firm_2030": {
+      "value": 0.145,
+      "low": null,
+      "high": null,
+      "unit": "share of annual energy",
+      "source_url": "https://dced.pa.gov/business-assistance/data-center-resources/grid-standards/",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "PA GRID Standards: incremental capacity located in the same PJM deliverability area must include clean firm energy of 14.5% beginning 1 January 2030. The page does not define clean firm."
+    },
+    "clean_firm_2035": {
+      "value": 0.32,
+      "low": null,
+      "high": null,
+      "unit": "share of annual energy",
+      "source_url": "https://dced.pa.gov/business-assistance/data-center-resources/grid-standards/",
+      "last_verified": "2026-08",
+      "basis": "sourced",
+      "method": "PA GRID Standards: incremental capacity located in the same PJM deliverability area must include clean firm energy of 32.0% beginning 1 January 2035. The page does not define clean firm."
+    },
+    "curtailment_event_hours": {
+      "value": 4,
+      "low": 2,
+      "high": 4,
+      "unit": "hours",
+      "source_url": "https://www.powermag.com/duke-researchers-grid-flexibility-key-to-accommodate-load-growth",
+      "last_verified": "2025-02",
+      "basis": "modeled",
+      "method": "The battery carries the whole campus for 4 hours, the standard utility battery size. Duke's \"Rethinking Load Growth\" (Norris et al., Feb 2025) finds the average curtailment event lasts 1.7 hours at 0.25% annual curtailment and 2.1 hours at 0.5%, so 4 hours covers roughly twice the average event."
+    },
+    "curtailment_share_of_energy": {
+      "value": 0.005,
+      "low": null,
+      "high": null,
+      "unit": "share of annual energy",
+      "source_url": "https://www.powermag.com/duke-researchers-grid-flexibility-key-to-accommodate-load-growth",
+      "last_verified": "2025-02",
+      "basis": "sourced",
+      "method": "Duke's 0.5% curtailment case, where PJM alone could absorb about 18 GW of new flexible load, averaging 177 curtailed hours a year across the 22 balancing authorities studied."
+    },
+    "flexible_peak_reduction_share": {
+      "value": 1.0,
+      "low": null,
+      "high": null,
+      "unit": "share of campus peak",
+      "source_url": "https://www.pjm.com/-/media/DotCom/about-pjm/who-we-are/public-disclosures/2026/20260116-pjm-board-letter-re-results-of-the-cifp-process-large-load-additions.pdf",
+      "last_verified": "2026-01",
+      "basis": "modeled",
+      "method": "During a grid emergency the battery carries the full campus, so the campus draws nothing from PJM in those hours. A load that is off the grid at the system peak avoids the capacity charge tied to that peak. Under PJM's 16 Jan 2026 Board decision, new large loads without their own generation are curtailed before pre-emergency demand response, so a campus that can drop to zero on call fits the rule PJM has adopted."
+    },
+    "flexible_years_saved": {
+      "value": 1,
+      "low": 0,
+      "high": 2,
+      "unit": "years",
+      "source_url": "https://www.pjm.com/-/media/DotCom/about-pjm/who-we-are/public-disclosures/2026/20260116-pjm-board-letter-re-results-of-the-cifp-process-large-load-additions.pdf",
+      "last_verified": "2026-01",
+      "basis": "assumed",
+      "method": "How much sooner a load that accepts curtailment can connect is not published. PJM's connect-and-manage decision lets large loads connect subject to curtailment before every upgrade is built, and its Expedited Interconnection Track runs 10 months for projects that bring generation. One year is an assumption; low is 0 and high is 2."
+    },
+    "pjm_shortfall_2028_mw": {
+      "value": 6831.3,
+      "low": 6623,
+      "high": null,
+      "unit": "MW",
+      "source_url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf",
+      "last_verified": "2026-07",
+      "basis": "sourced",
+      "method": "PJM's 2028/29 Base Residual Auction cleared 6,831.3 MW short of the reliability requirement. Low is the 2027/28 shortfall, 6,623 MW, the first year PJM cleared short."
     }
   }
 }

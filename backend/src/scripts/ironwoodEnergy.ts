@@ -4,21 +4,23 @@
  * Compares the power supply options the case names for the Ironwood campus
  * (Upper Mount Bethel, Northampton County, PA):
  *
- *   grid       buy everything from the PJM grid through the local utility
- *   gas        build onsite natural gas generation and run off it
- *   clean      grid power plus clean-energy contracts and a battery
- *   flexible   grid power, with the campus cutting its grid draw during the
- *              few grid-emergency hours a year, a battery carrying the load so
- *              the servers never stop
- *   hybrid     the chief engineer's package: flexible plus clean contracts
+ *   grid      buy everything from the PJM grid through the local utility
+ *   gas       build an onsite natural gas engine plant and run off it
+ *   clean     grid power plus clean-energy contracts sized to Pennsylvania's
+ *             2035 clean firm share
+ *   flexible  grid power, with a 4-hour battery that carries the campus during
+ *             grid emergencies so its grid draw falls to zero on call while the
+ *             servers keep running
+ *   hybrid    the energy half of the chief engineer's design: flexible plus
+ *             clean contracts
  *
  * For each it reports the cost per MWh and per year, CO2 per year, the years
- * until first power, and the peak load the campus adds to PJM, for phase 1
- * (480 MW) and the full campus (2,000 MW).
+ * until first power, the peak the campus adds to PJM in an emergency, and
+ * whether it meets the state's 2035 clean firm step, for phase 1 (480 MW) and
+ * the full campus (2,000 MW). A sensitivity list moves one input at a time.
  *
  * Every input lives in data/cases/ironwood-energy.json with its source, date
- * and working, the same way regions.json carries the cost drivers. Nothing
- * here is a bare number except unit conversions.
+ * and working, the same way regions.json carries the cost drivers.
  *
  *   npx tsx src/scripts/ironwoodEnergy.ts
  */
@@ -40,188 +42,181 @@ export interface Param {
 
 export type Params = Record<string, Param>
 
-const HOURS = 8_760
-const LB_PER_METRIC_TON = 2_204.62
+export const HOURS = 8_760
+export const LB_PER_METRIC_TON = 2_204.62
 
 export function loadParams(): Params {
   const here = dirname(fileURLToPath(import.meta.url))
   const path = resolve(here, '../../../data/cases/ironwood-energy.json')
-  const raw = JSON.parse(readFileSync(path, 'utf8')) as { params: Params }
-  return raw.params
+  return (JSON.parse(readFileSync(path, 'utf8')) as { params: Params }).params
+}
+
+/** A copy of the inputs with some values replaced, for one-at-a-time sensitivities. */
+export function withValues(params: Params, values: Record<string, number>): Params {
+  const out: Params = { ...params }
+  for (const [k, v] of Object.entries(values)) {
+    if (!out[k]) throw new Error(`unknown input ${k}`)
+    out[k] = { ...out[k], value: v }
+  }
+  return out
 }
 
 export type OptionId = 'grid' | 'gas' | 'clean' | 'flexible' | 'hybrid'
-export type Point = 'value' | 'low' | 'high'
 
 export interface OptionResult {
-  id:                OptionId
-  label:             string
-  usd_per_mwh:       number
-  annual_cost_usd:   number
-  annual_co2_tonnes: number
-  co2_vs_grid_pct:   number
-  years_to_power:    number
-  pjm_peak_added_mw: number
-  battery_mwh:       number
-  notes:             string[]
+  id:                   OptionId
+  label:                string
+  usd_per_mwh:          number
+  annual_cost_usd:      number
+  annual_co2_tonnes:    number
+  co2_vs_grid_pct:      number
+  years_to_power:       number
+  emergency_peak_mw:    number
+  battery_mwh:          number
+  meets_clean_firm_2035: boolean
 }
 
 export interface Scenario {
-  facility_mw:  number
-  annual_mwh:   number
-  options:      OptionResult[]
-  clean_firm:   Array<{ year: number; share: number; mwh: number }>
+  facility_mw:                number
+  annual_mwh:                 number
+  options:                    OptionResult[]
+  clean_firm:                 Array<{ year: number; share: number; mwh: number }>
   capacity_cost_usd_per_year: number
+  share_of_pjm_shortfall:     number
+  curtailed_mwh_per_year:     number
 }
+
+const crf = (r: number, n: number) => (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
 
 /**
- * Pick one point of a parameter's range. A missing low or high falls back to
- * the value, so a parameter without a range is held fixed.
+ * Levelized cost of onsite gas in $/MWh: capital recovered over the contract
+ * at the discount rate, fixed O&M on the spare capacity too, fuel and variable
+ * O&M. Built from parts rather than borrowed from a published LCOE so the gas
+ * price, spare capacity and plant cost can each move.
  */
-function pick(p: Param, at: Point): number {
-  if (at === 'low')  return p.low  ?? p.value
-  if (at === 'high') return p.high ?? p.value
-  return p.value
+export function gasLcoe(params: Params): number {
+  const v = (k: string) => params[k].value
+  const redundancy = v('gas_redundancy_factor')
+  const mwhPerKwYear = (HOURS * v('gas_capacity_factor')) / 1000
+  const capital = (v('gas_capex_usd_per_kw') * redundancy * crf(v('discount_rate'), v('gas_plant_life_years'))
+    + v('gas_fixed_om_usd_per_kw_yr') * redundancy) / mwhPerKwYear
+  const fuel = (v('gas_heat_rate_btu_per_kwh') / 1000) * v('gas_price_usd_per_mmbtu')
+  return capital + fuel + v('gas_variable_om_usd_per_mwh')
 }
 
-/**
- * Levelized cost of onsite gas in $/MWh from its parts: capital recovered over
- * the plant's life at the discount rate, fixed O&M, fuel and variable O&M.
- * Computed rather than borrowed from a published LCOE so the gas price and the
- * capacity factor can move, and checked against Lazard's published range.
- */
-export function gasLcoe(params: Params, at: Point = 'value', gasPricePerMMBtu?: number): number {
-  const r     = params.discount_rate.value
-  const n     = params.gas_plant_life_years.value
-  const crf   = (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
-  const capex = pick(params.gas_capex_usd_per_kw, at) * params.gas_redundancy_factor.value
-  const fom   = params.gas_fixed_om_usd_per_kw_yr.value * params.gas_redundancy_factor.value
-  const cf    = params.gas_capacity_factor.value
-  const mwhPerKwYear = (HOURS * cf) / 1000
-  const capital = (capex * crf + fom) / mwhPerKwYear
-  const fuel = (params.gas_heat_rate_btu_per_kwh.value / 1000) * (gasPricePerMMBtu ?? pick(params.gas_price_usd_per_mmbtu, at))
-  return capital + fuel + params.gas_variable_om_usd_per_mwh.value
-}
-
-export function runEnergy(facilityMw: number, at: Point = 'value', params: Params = loadParams()): Scenario {
-  const P = (k: string) => {
+export function runEnergy(facilityMw: number, params: Params = loadParams()): Scenario {
+  const v = (k: string) => {
     const p = params[k]
     if (!p) throw new Error(`ironwood-energy.json is missing ${k}`)
-    return pick(p, at)
+    return p.value
   }
-  const annualMwh = facilityMw * HOURS * P('load_factor')
+  const annualMwh = facilityMw * HOURS * v('load_factor')
 
-  // ── Grid ──────────────────────────────────────────────────────────────────
-  const gridPrice  = P('grid_price_usd_per_mwh')
-  const gridCo2Lb  = P('grid_co2_lb_per_mwh')
-  const gridTonnes = (annualMwh * gridCo2Lb) / LB_PER_METRIC_TON
-  const gridYears  = P('grid_connection_years')
-  const capacityCost = facilityMw * P('capacity_price_usd_per_mw_day') * 365
+  // Grid
+  const gridPrice  = v('grid_price_usd_per_mwh')
+  const gridTonnes = (annualMwh * v('grid_co2_lb_per_mwh')) / LB_PER_METRIC_TON
+  const gridYears  = v('grid_connection_years')
+  const capacityPerYear = facilityMw * v('capacity_price_usd_per_mw_day') * 365
 
-  // ── Onsite gas ────────────────────────────────────────────────────────────
-  const gasPrice  = gasLcoe(params, at)
-  const gasCo2Lb  = (params.gas_heat_rate_btu_per_kwh.value / 1000) * params.gas_co2_lb_per_mmbtu.value
-  const gasTonnes = (annualMwh * gasCo2Lb) / LB_PER_METRIC_TON
-  const gasYears  = P('gas_years_to_power')
+  // Onsite gas
+  const gasPrice  = gasLcoe(params)
+  const gasTonnes = (annualMwh * (v('gas_heat_rate_btu_per_kwh') / 1000) * v('gas_co2_lb_per_mmbtu')) / LB_PER_METRIC_TON
 
-  // ── Battery sized for grid emergencies ────────────────────────────────────
-  // Carries the whole campus for the longest curtailment event the flexibility
-  // study reports, so the servers keep running while the grid draw falls.
-  const batteryMwh   = facilityMw * P('curtailment_event_hours')
-  const batteryCapex = batteryMwh * 1000 * P('battery_capex_usd_per_kwh')
-  const r = params.discount_rate.value
-  const life = params.battery_life_years.value
-  const crf = (r * Math.pow(1 + r, life)) / (Math.pow(1 + r, life) - 1)
-  const batteryPerYear = batteryCapex * crf * (1 + params.battery_fixed_om_share.value)
-  const batteryPerMwh  = batteryPerYear / annualMwh
+  // Battery that carries the whole campus through a grid emergency
+  const batteryMwh   = facilityMw * v('curtailment_event_hours')
+  const batteryCapex = batteryMwh * 1000 * v('battery_capex_usd_per_kwh')
+  const batteryPerYear = batteryCapex * crf(v('discount_rate'), v('battery_life_years'))
+    + batteryCapex * v('battery_fixed_om_share')
+  const batteryPerMwh = batteryPerYear / annualMwh
 
-  // ── Clean contracts ───────────────────────────────────────────────────────
-  // A virtual PPA settles against the market: the campus pays the contract
-  // price and receives the market price for the contracted share, so the net
-  // cost is the gap between the two on that share. Emissions are counted on a
-  // market basis, which is how the customer reports against its carbon goal.
-  const cleanShare   = P('clean_contract_share')
-  const ppaGap       = P('ppa_price_usd_per_mwh') - P('wholesale_energy_usd_per_mwh')
-  const cleanAdder   = cleanShare * ppaGap
-  const cleanTonnes  = gridTonnes * (1 - cleanShare)
+  // Clean contracts: a virtual PPA pays the contract price and receives the
+  // market price on the contracted share, so the net cost is the gap between
+  // the two on that share. Emissions are counted on a market basis.
+  const cleanShare  = v('clean_contract_share')
+  const cleanAdder  = cleanShare * (v('ppa_price_usd_per_mwh') - v('wholesale_energy_usd_per_mwh'))
+  const cleanTonnes = gridTonnes * (1 - cleanShare)
 
-  // ── Flexible load ─────────────────────────────────────────────────────────
-  // Accepting curtailment lets the campus connect ahead of the full upgrade
-  // and removes its peak from the capacity PJM must buy for those hours.
-  const flexYears   = Math.max(0, gridYears - P('flexible_years_saved'))
-  const flexPeakMw  = facilityMw * (1 - P('flexible_peak_reduction_share'))
-  const flexCapSave = (facilityMw - flexPeakMw) * P('capacity_price_usd_per_mw_day') * 365 / annualMwh
+  // Flexible load: off the grid in emergencies, so the capacity charge tied to
+  // the system peak falls by the share of the peak the battery removes.
+  const peakCut       = v('flexible_peak_reduction_share')
+  const flexPeakMw    = facilityMw * (1 - peakCut)
+  const capacitySaved = (facilityMw - flexPeakMw) * v('capacity_price_usd_per_mw_day') * 365 / annualMwh
+  const flexYears     = Math.max(0, gridYears - v('flexible_years_saved'))
 
-  const options: OptionResult[] = [
-    {
-      id: 'grid', label: 'Grid only',
-      usd_per_mwh: gridPrice, annual_cost_usd: gridPrice * annualMwh,
-      annual_co2_tonnes: gridTonnes, co2_vs_grid_pct: 0,
-      years_to_power: gridYears, pjm_peak_added_mw: facilityMw, battery_mwh: 0,
-      notes: ['Full campus peak lands on PJM in every hour, including grid emergencies.'],
-    },
-    {
-      id: 'gas', label: 'Onsite gas',
-      usd_per_mwh: gasPrice, annual_cost_usd: gasPrice * annualMwh,
-      annual_co2_tonnes: gasTonnes, co2_vs_grid_pct: pct(gasTonnes, gridTonnes),
-      years_to_power: gasYears, pjm_peak_added_mw: 0, battery_mwh: 0,
-      notes: ['Built with spare units so one can be down for maintenance without stopping the campus.'],
-    },
-    {
-      id: 'clean', label: 'Grid + clean contracts + battery',
-      usd_per_mwh: gridPrice + cleanAdder + batteryPerMwh, annual_cost_usd: (gridPrice + cleanAdder + batteryPerMwh) * annualMwh,
-      annual_co2_tonnes: cleanTonnes, co2_vs_grid_pct: pct(cleanTonnes, gridTonnes),
-      years_to_power: gridYears, pjm_peak_added_mw: facilityMw, battery_mwh: batteryMwh,
-      notes: ['The battery here covers outages only; it is not offered to PJM as load reduction.'],
-    },
-    {
-      id: 'flexible', label: 'Grid + emergency load reduction',
-      usd_per_mwh: gridPrice + batteryPerMwh - flexCapSave, annual_cost_usd: (gridPrice + batteryPerMwh - flexCapSave) * annualMwh,
-      annual_co2_tonnes: gridTonnes, co2_vs_grid_pct: 0,
-      years_to_power: flexYears, pjm_peak_added_mw: flexPeakMw, battery_mwh: batteryMwh,
-      notes: ['The battery carries the servers through each grid emergency, so operations never stop.'],
-    },
-    {
-      id: 'hybrid', label: 'Hybrid (engineer\'s design)',
-      usd_per_mwh: gridPrice + cleanAdder + batteryPerMwh - flexCapSave,
-      annual_cost_usd: (gridPrice + cleanAdder + batteryPerMwh - flexCapSave) * annualMwh,
-      annual_co2_tonnes: cleanTonnes, co2_vs_grid_pct: pct(cleanTonnes, gridTonnes),
-      years_to_power: flexYears, pjm_peak_added_mw: flexPeakMw, battery_mwh: batteryMwh,
-      notes: ['Flexible load plus clean contracts, the energy half of the case\'s hybrid design.'],
-    },
+  const meets = cleanShare >= v('clean_firm_2035')
+  const option = (id: OptionId, label: string, perMwh: number, tonnes: number, years: number, peak: number, battery: number, clean: boolean): OptionResult => ({
+    id, label, usd_per_mwh: perMwh, annual_cost_usd: perMwh * annualMwh,
+    annual_co2_tonnes: tonnes, co2_vs_grid_pct: (tonnes / gridTonnes - 1) * 100,
+    years_to_power: years, emergency_peak_mw: peak, battery_mwh: battery, meets_clean_firm_2035: clean,
+  })
+
+  const options = [
+    option('grid',     'Grid only',                        gridPrice,                                  gridTonnes,  gridYears, facilityMw, 0,          false),
+    option('gas',      'Onsite gas engines',               gasPrice,                                   gasTonnes,   v('gas_years_to_power'), 0, 0,     false),
+    option('clean',    'Grid + clean contracts',           gridPrice + cleanAdder,                     cleanTonnes, gridYears, facilityMw, 0,          meets),
+    option('flexible', 'Grid + battery for emergencies',   gridPrice + batteryPerMwh - capacitySaved,  gridTonnes,  flexYears, flexPeakMw, batteryMwh, false),
+    option('hybrid',   'Hybrid (flexible + clean)',        gridPrice + cleanAdder + batteryPerMwh - capacitySaved, cleanTonnes, flexYears, flexPeakMw, batteryMwh, meets),
   ]
 
-  const clean_firm = (['clean_firm_2027', 'clean_firm_2030', 'clean_firm_2035'] as const).map((k) => ({
-    year: Number(k.slice(-4)), share: params[k].value, mwh: params[k].value * annualMwh,
-  }))
-
-  return { facility_mw: facilityMw, annual_mwh: annualMwh, options, clean_firm, capacity_cost_usd_per_year: capacityCost }
+  return {
+    facility_mw: facilityMw,
+    annual_mwh: annualMwh,
+    options,
+    clean_firm: [2027, 2030, 2035].map((year) => ({ year, share: v(`clean_firm_${year}`), mwh: v(`clean_firm_${year}`) * annualMwh })),
+    capacity_cost_usd_per_year: capacityPerYear,
+    share_of_pjm_shortfall: facilityMw / v('pjm_shortfall_2028_mw'),
+    curtailed_mwh_per_year: annualMwh * v('curtailment_share_of_energy'),
+  }
 }
 
-function pct(a: number, b: number): number { return b === 0 ? 0 : (a / b - 1) * 100 }
+/** One input at a time, to its low or high end, for phase 1. */
+export function sensitivities(params: Params = loadParams()) {
+  const mw = params.phase1_mw.value
+  const base = runEnergy(mw, params)
+  const rows: Array<{ input: string; to: number; option: OptionId; usd_per_mwh: number; change: number }> = []
+  const cases: Array<[string, 'low' | 'high', OptionId[]]> = [
+    ['gas_price_usd_per_mmbtu',      'high', ['gas']],
+    ['gas_price_usd_per_mmbtu',      'low',  ['gas']],
+    ['gas_capex_usd_per_kw',         'high', ['gas']],
+    ['battery_capex_usd_per_kwh',    'low',  ['flexible', 'hybrid']],
+    ['battery_capex_usd_per_kwh',    'high', ['flexible', 'hybrid']],
+    ['curtailment_event_hours',      'low',  ['flexible', 'hybrid']],
+    ['grid_price_usd_per_mwh',       'high', ['grid', 'clean', 'flexible', 'hybrid']],
+    ['wholesale_energy_usd_per_mwh', 'high', ['clean', 'hybrid']],
+    ['ppa_price_usd_per_mwh',        'low',  ['clean', 'hybrid']],
+  ]
+  for (const [input, end, ids] of cases) {
+    const to = params[input][end]
+    if (to === null || to === undefined) continue
+    const s = runEnergy(mw, withValues(params, { [input]: to }))
+    for (const id of ids) {
+      const now = s.options.find((o) => o.id === id)!.usd_per_mwh
+      const was = base.options.find((o) => o.id === id)!.usd_per_mwh
+      rows.push({ input, to, option: id, usd_per_mwh: now, change: now - was })
+    }
+  }
+  return rows
+}
 
 const M = (n: number) => `$${(n / 1e6).toFixed(0)}M`
-const T = (n: number) => `${(n / 1e6).toFixed(2)}M t`
 
 async function main() {
   const params = loadParams()
   const outDir = resolve(process.cwd(), 'case-output')
   mkdirSync(outDir, { recursive: true })
-  const result: Record<string, Scenario> = {}
-  for (const mw of [params.phase1_mw.value, params.full_build_mw.value]) {
-    for (const at of ['value', 'low', 'high'] as Point[]) {
-      const s = runEnergy(mw, at, params)
-      result[`${mw}MW-${at}`] = s
-      if (at !== 'value') continue
-      console.log(`\n=== ${mw} MW, ${(s.annual_mwh / 1e6).toFixed(2)} TWh a year ===`)
-      for (const o of s.options) {
-        console.log(`${o.label.padEnd(36)} $${o.usd_per_mwh.toFixed(1)}/MWh  ${M(o.annual_cost_usd)}/yr  CO2 ${T(o.annual_co2_tonnes)} (${o.co2_vs_grid_pct.toFixed(0)}%)  power in ${o.years_to_power.toFixed(1)} yr  PJM peak ${o.pjm_peak_added_mw.toFixed(0)} MW  battery ${o.battery_mwh.toFixed(0)} MWh`)
-      }
-      console.log(`capacity cost at the auction price: ${M(s.capacity_cost_usd_per_year)}/yr`)
-      for (const c of s.clean_firm) console.log(`clean firm ${c.year}: ${(c.share * 100).toFixed(1)}% = ${(c.mwh / 1e3).toFixed(0)} GWh`)
+  const scenarios = [params.phase1_mw.value, params.full_build_mw.value].map((mw) => runEnergy(mw, params))
+  for (const s of scenarios) {
+    console.log(`\n=== ${s.facility_mw} MW, ${(s.annual_mwh / 1e6).toFixed(2)} TWh a year, ${(s.share_of_pjm_shortfall * 100).toFixed(1)}% of PJM's 2028/29 shortfall ===`)
+    for (const o of s.options) {
+      console.log(`${o.label.padEnd(32)} $${o.usd_per_mwh.toFixed(1)}/MWh  ${M(o.annual_cost_usd)}/yr  CO2 ${(o.annual_co2_tonnes / 1e6).toFixed(2)}M t (${o.co2_vs_grid_pct >= 0 ? '+' : ''}${o.co2_vs_grid_pct.toFixed(0)}%)  power in ${o.years_to_power} yr  emergency peak ${o.emergency_peak_mw.toFixed(0)} MW  battery ${o.battery_mwh.toFixed(0)} MWh  2035 clean firm ${o.meets_clean_firm_2035 ? 'yes' : 'no'}`)
     }
+    console.log(`capacity charge at the auction price: ${M(s.capacity_cost_usd_per_year)}/yr; curtailed energy ${(s.curtailed_mwh_per_year / 1e3).toFixed(0)} GWh/yr`)
+    for (const c of s.clean_firm) console.log(`clean firm ${c.year}: ${(c.share * 100).toFixed(1)}% = ${(c.mwh / 1e3).toFixed(0)} GWh`)
   }
-  writeFileSync(resolve(outDir, 'energy-summary.json'), JSON.stringify({ generated_at: new Date().toISOString(), result }, null, 2))
+  const sens = sensitivities(params)
+  console.log('\n=== Phase 1 sensitivities ===')
+  for (const r of sens) console.log(`${r.input} -> ${r.to}: ${r.option} $${r.usd_per_mwh.toFixed(1)}/MWh (${r.change >= 0 ? '+' : ''}${r.change.toFixed(1)})`)
+  writeFileSync(resolve(outDir, 'energy-summary.json'), JSON.stringify({ generated_at: new Date().toISOString(), scenarios, sensitivities: sens }, null, 2))
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
