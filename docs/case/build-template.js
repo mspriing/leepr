@@ -26,7 +26,6 @@ pres.defineSlideMaster({title:'Section', background:{color:INK}, objects:[
 ], slideNumber:{x:12.13,y:6.95,w:0.4,h:0.3,fontFace:BODY,fontSize:9,color:MUTE,align:'right',margin:0}});
 pres.defineSlideMaster({title:'Content', background:{color:'FFFFFF'}, objects:[
   {placeholder:{options:{name:'title',type:'title',x:0.6,y:0.42,w:12.13,h:1.05,fontFace:HEAD,fontSize:26,color:INK,valign:'top',align:'left',margin:0},text:'Action title'}},
-  {placeholder:{options:{name:'body',type:'body',x:0.6,y:1.8,w:12.13,h:4.8,fontFace:BODY,fontSize:16,color:INK,valign:'top',margin:0},text:'Body'}},
   {text:{text:FOOT,options:{x:0.6,y:6.95,w:8,h:0.3,fontFace:BODY,fontSize:9,color:MUTE,margin:0}}},
 ], slideNumber:{x:12.33,y:6.95,w:0.4,h:0.3,fontFace:BODY,fontSize:9,color:MUTE,align:'right',margin:0}});
 
@@ -129,13 +128,14 @@ s.addNotes('Lead with the IRR against the 10% hurdle, then the NPV. Name the one
 sec=section('04','Power and energy','Hand off to the presenter covering power.');
 s=pres.addSlide({masterName:'Content',sectionTitle:sec});
 s.addText('Onsite gas costs least per MWh, while only clean contracts and the hybrid meet the 2035 clean step',{placeholder:'title'});
-s.addChart(pres.charts.BAR,[{name:'Cost per MWh',labels:['Grid only','Onsite gas','Grid + clean contracts','Grid + battery','Hybrid'],values:[93.6,67.1,103.3,103.9,113.6]}],{
-  x:0.6,y:1.75,w:7.9,h:4.65,barDir:'col',barGapWidthPct:60,
-  chartColors:['8A949C','8A949C',GREEN,'8A949C',GREEN],
-  showValue:true,dataLabelPosition:'outEnd',dataLabelFormatCode:'$0.0',dataLabelColor:INK,dataLabelFontSize:12,dataLabelFontFace:'+mn-lt',
-  catAxisLabelColor:SLATE,catAxisLabelFontSize:11,catAxisLabelFontFace:'+mn-lt',catAxisLineShow:true,catAxisLineColor:LINE,
-  valAxisHidden:true,valAxisMinVal:0,valAxisMaxVal:130,valGridLine:{style:'none'},catGridLine:{style:'none'},
-  showLegend:false,showTitle:true,title:'Phase 1 energy cost, $ per MWh',titleFontSize:12,titleColor:SLATE,titleFontFace:'+mn-lt',objectName:'Energy cost chart'});
+s.addText('Phase 1 energy cost, $ per MWh',tb({x:0.6,y:1.8,w:7.9,h:0.35,fontSize:12,color:SLATE,objectName:'Chart title'}));
+const bars=[['Grid only',93.6,'8A949C'],['Onsite gas',67.1,'8A949C'],['Grid + clean contracts',103.3,GREEN],['Grid + battery',103.9,'8A949C'],['Hybrid',113.6,GREEN]];
+const base=5.75, top=2.6, maxV=113.6, bw=1.05, step=1.55, x0=0.85;
+bars.forEach((b,i)=>{const h=(b[1]/maxV)*(base-top), x=x0+i*step;
+  s.addShape(pres.shapes.RECTANGLE,{x,y:base-h,w:bw,h,fill:{color:b[2]},line:{type:'none'},objectName:'Bar '+b[0]});
+  s.addText('$'+b[1].toFixed(1),tb({x:x-0.2,y:base-h-0.38,w:bw+0.4,h:0.32,fontSize:13,bold:true,align:'center'}));
+  s.addText(b[0],tb({x:x-0.25,y:base+0.1,w:bw+0.5,h:0.55,fontSize:11,color:SLATE,align:'center'}));});
+hline(s,0.6,base,7.9,'B8C0C6',1);
 s.addShape(pres.shapes.RECTANGLE,{x:8.9,y:1.75,w:3.83,h:4.65,fill:{color:TINT},line:{type:'none'},objectName:'Takeaway panel'});
 s.addText('What this means',tb({x:9.2,y:2.0,w:3.3,h:0.35,fontSize:13,bold:true,color:GREEN}));
 s.addText([
