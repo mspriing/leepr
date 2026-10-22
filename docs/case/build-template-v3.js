@@ -19,6 +19,7 @@ pres.defineSlideMaster({title:'Title', background:{color:NAVY}, objects:[
   {placeholder:{options:{name:'title',type:'title',x:0.8,y:2.35,w:11.2,h:1.4,fontFace:HEAD,fontSize:44,bold:true,color:'FFFFFF',valign:'bottom',align:'left',margin:0},text:'Title'}},
   {placeholder:{options:{name:'subtitle',type:'body',x:0.8,y:3.95,w:11.2,h:0.7,fontFace:BODY,fontSize:20,color:ONDARK,valign:'top',align:'left',margin:0},text:'Subtitle'}},
 ]});
+pres.defineSlideMaster({title:'Dark', background:{color:NAVY}, objects:[]});
 pres.defineSlideMaster({title:'Content', background:{color:GROUND}, objects:[
   {placeholder:{options:{name:'title',type:'title',x:0.6,y:0.5,w:10.7,h:1.0,fontFace:HEAD,fontSize:22,bold:true,color:INK,valign:'top',align:'left',margin:0},text:'Action title'}},
   {text:{text:'SLAM Consulting',options:{x:0.6,y:7.02,w:4,h:0.25,fontFace:BODY,fontSize:9,bold:true,color:MUTE,margin:0}}},
@@ -260,7 +261,7 @@ src(s,'Source: Case timeline; PJM interconnection estimates; SLAM analysis');
 s.addNotes('Drag each bar to the team dates and keep the diamond on first power. Choose KPIs that track the promises made earlier, such as clean energy share, ratepayer impact and first-power date.');
 
 // ---------- Closing ask
-s=pres.addSlide({masterName:'Title'});
+s=pres.addSlide({masterName:'Dark'});
 s.addText('What we ask KGE to approve today',tb({x:0.8,y:1.55,w:11.7,h:0.9,fontSize:34,bold:true,color:'FFFFFF'}));
 ['[Decision one]','[Decision two]','[Decision three]'].forEach((d,i)=>{const y=2.85+i*1.05;
   hline(s,0.8,y,11.73,'2E4566');
