@@ -1,5 +1,26 @@
 # Ironwood Energy Options
 
+## Snapshot 2, 24 October 2026
+
+These figures come from the same model after three input changes. PJM's 2025 load management events in the Met-Ed and PPL zones ran 3.2 to 7 hours, so the battery stays at 4 hours and a 2-hour version is reported only as a low case. FERC rejected PJM's connect-and-manage filing on 9 October 2026 and no faster interconnection path exists for flexible loads, so the flexible and hybrid options now connect on the grid's 4-year timeline. The PA PUC Large Load Model Tariff (13 May 2026) sets who pays for upgrades.
+
+| Option | Per MWh | Per year | CO2 per year | Years to power | 2035 clean step |
+|---|---|---|---|---|---|
+| Grid only | $93.6 | $394M | 1.14M t | 4 | No |
+| Onsite gas engines | $67.1 | $282M | 1.85M t | 2.5 | No |
+| Grid + clean contracts | $103.3 | $434M | 0.77M t | 4 | Yes |
+| Grid + 4-hour battery | $103.9 | $437M | 1.14M t | 4 | No |
+| Hybrid, 4-hour battery | $113.6 | $478M | 0.77M t | 4 | Yes |
+| Hybrid, 2-hour battery (low case) | $101.7 | $428M | 0.77M t | 4 | Yes |
+
+- The hybrid with a 4-hour battery costs $20.02 more per MWh than grid only, about $84M a year for phase 1.
+- Across every input range tested, that premium stays between $10.94 and $25.46 per MWh. The retail grid price does not move it, since it moves both options equally.
+- The 1,920 MWh battery carries the full 480 MW for 4 hours, or half the load for 8 hours, longer than any 2025 event in the Met-Ed zone.
+
+Sources added in this snapshot: PJM demand response event report, December 2025, https://www.pjm.com/-/media/DotCom/committees-groups/committees/mmuac/2025/20251205/20251205-dr-events.pdf ; FERC order on IRAS, 9 October 2026, https://www.pjm.com/pjmfiles/directory/etariff/FercOrders/9207/20261009-er26-3515-000.pdf ; PA PUC Large Load Model Tariff final order, https://www.puc.pa.gov/press-release/2026/puc-releases-final-order-establishing-first-of-its-kind-large-load-model-tariff-framework-05132026
+
+A number in Snapshot 1 below that differs from this one belongs to the earlier inputs rather than being corrected here.
+
 ## Snapshot 1, 19 October 2026
 
 These figures come from `backend/src/scripts/ironwoodEnergy.ts` on the `ironwood-case` branch, using the inputs in `data/cases/ironwood-energy.json`. A different number in a later snapshot reflects newer inputs rather than a correction to this one.
