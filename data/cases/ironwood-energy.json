@@ -274,12 +274,12 @@
     "curtailment_event_hours": {
       "value": 4,
       "low": 2,
-      "high": 4,
+      "high": 8,
       "unit": "hours",
-      "source_url": "https://www.powermag.com/duke-researchers-grid-flexibility-key-to-accommodate-load-growth",
-      "last_verified": "2025-02",
-      "basis": "modeled",
-      "method": "The battery carries the whole campus for 4 hours, the standard utility battery size. Duke's \"Rethinking Load Growth\" (Norris et al., Feb 2025) finds the average curtailment event lasts 1.7 hours at 0.25% annual curtailment and 2.1 hours at 0.5%, so 4 hours covers roughly twice the average event."
+      "source_url": "https://www.pjm.com/-/media/DotCom/committees-groups/committees/mmuac/2025/20251205/20251205-dr-events.pdf",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "PJM's summer 2025 load management deployments in the Met-Ed and PPL zones ran 3.2 to 7 hours (23 June 7.0 h, 24 June 6.5 h, 25 June 3.17 h, 29 July 5.5 to 6.5 h). A 4-hour battery carries the full campus through the shortest of those and the critical half of the load for 8 hours, longer than any of them. Duke University's national averages of 1.7 to 2.5 hours are the low case."
     },
     "curtailment_share_of_energy": {
       "value": 0.005,
@@ -302,14 +302,14 @@
       "method": "During a grid emergency the battery carries the full campus, so the campus draws nothing from PJM in those hours. A load that is off the grid at the system peak avoids the capacity charge tied to that peak. Under PJM's 16 Jan 2026 Board decision, new large loads without their own generation are curtailed before pre-emergency demand response, so a campus that can drop to zero on call fits the rule PJM has adopted."
     },
     "flexible_years_saved": {
-      "value": 1,
+      "value": 0,
       "low": 0,
-      "high": 2,
+      "high": 1,
       "unit": "years",
-      "source_url": "https://www.pjm.com/-/media/DotCom/about-pjm/who-we-are/public-disclosures/2026/20260116-pjm-board-letter-re-results-of-the-cifp-process-large-load-additions.pdf",
-      "last_verified": "2026-01",
-      "basis": "assumed",
-      "method": "How much sooner a load that accepts curtailment can connect is not published. PJM's connect-and-manage decision lets large loads connect subject to curtailment before every upgrade is built, and its Expedited Interconnection Track runs 10 months for projects that bring generation. One year is an assumption; low is 0 and high is 2."
+      "source_url": "https://www.utilitydive.com/news/ferc-pjm-large-load-interconnection-iras-byonc/832716/",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "No faster interconnection path exists for flexible loads. PJM's Expedited Interconnection Track covers generation only, FERC rejected PJM's connect-and-manage (IRAS) filing on 9 October 2026, and FERC's June 2026 order on non-firm network service for flexible loads is still pending (responses due 16 November 2026). The high case of 1 year applies only if that service is adopted."
     },
     "pjm_shortfall_2028_mw": {
       "value": 6831.3,
@@ -328,8 +328,8 @@
       "unit": "hours",
       "source_url": "https://www.powermag.com/duke-researchers-grid-flexibility-key-to-accommodate-load-growth",
       "last_verified": "2026-10",
-      "basis": "sourced",
-      "method": "Duke University's Rethinking Load Growth found average curtailment events of 1.7 to 2.1 hours at 0.25% to 1% curtailment, so a 2-hour battery covers a typical PJM emergency. The 4-hour battery in curtailment_event_hours stays as the conservative case."
+      "basis": "modeled",
+      "method": "Low case only. Duke University's national average curtailment of 1.7 to 2.5 hours would suggest 2 hours, but PJM's 2025 events in the Met-Ed and PPL zones ran 3.2 to 7 hours, so the deck uses the 4-hour battery."
     }
   }
 }
