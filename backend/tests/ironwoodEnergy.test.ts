@@ -71,6 +71,13 @@ describe('energy figures against longhand arithmetic', () => {
     expect(opt('clean').co2_vs_grid_pct).toBeCloseTo(-v('clean_contract_share') * 100, 6)
   })
 
+  it('prices the 2-hour hybrid as the 4-hour hybrid with half the battery', () => {
+    const half = withValues(params, { curtailment_event_hours: v('recommended_battery_hours') })
+    const ref = runEnergy(v('phase1_mw'), half).options.find((o) => o.id === 'hybrid')!
+    expect(opt('hybrid_2h').usd_per_mwh).toBeCloseTo(ref.usd_per_mwh, 6)
+    expect(opt('hybrid_2h').battery_mwh).toBe(v('phase1_mw') * v('recommended_battery_hours'))
+  })
+
   it('scales linearly to the full campus', () => {
     const full = runEnergy(v('full_build_mw'))
     const ratio = v('full_build_mw') / v('phase1_mw')
@@ -81,7 +88,7 @@ describe('energy figures against longhand arithmetic', () => {
   })
 
   it('only the options carrying the 2035 clean share meet it', () => {
-    expect(s.options.filter((o) => o.meets_clean_firm_2035).map((o) => o.id).sort()).toEqual(['clean', 'hybrid'])
+    expect(s.options.filter((o) => o.meets_clean_firm_2035).map((o) => o.id).sort()).toEqual(['clean', 'hybrid', 'hybrid_2h'])
   })
 })
 

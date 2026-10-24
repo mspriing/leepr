@@ -61,7 +61,7 @@ export function withValues(params: Params, values: Record<string, number>): Para
   return out
 }
 
-export type OptionId = 'grid' | 'gas' | 'clean' | 'flexible' | 'hybrid'
+export type OptionId = 'grid' | 'gas' | 'clean' | 'flexible' | 'hybrid' | 'hybrid_2h'
 
 export interface OptionResult {
   id:                   OptionId
@@ -143,6 +143,11 @@ export function runEnergy(facilityMw: number, params: Params = loadParams()): Sc
   const capacitySaved = (facilityMw - flexPeakMw) * v('capacity_price_usd_per_mw_day') * 365 / annualMwh
   const flexYears     = Math.max(0, gridYears - v('flexible_years_saved'))
 
+  // The same hybrid with the battery sized to a typical emergency instead of the conservative case.
+  const battery2Mwh    = facilityMw * v('recommended_battery_hours')
+  const battery2Capex  = battery2Mwh * 1000 * v('battery_capex_usd_per_kwh')
+  const battery2PerMwh = (battery2Capex * crf(v('discount_rate'), v('battery_life_years')) + battery2Capex * v('battery_fixed_om_share')) / annualMwh
+
   const meets = cleanShare >= v('clean_firm_2035')
   const option = (id: OptionId, label: string, perMwh: number, tonnes: number, years: number, peak: number, battery: number, clean: boolean): OptionResult => ({
     id, label, usd_per_mwh: perMwh, annual_cost_usd: perMwh * annualMwh,
@@ -156,6 +161,7 @@ export function runEnergy(facilityMw: number, params: Params = loadParams()): Sc
     option('clean',    'Grid + clean contracts',           gridPrice + cleanAdder,                     cleanTonnes, gridYears, facilityMw, 0,          meets),
     option('flexible', 'Grid + battery for emergencies',   gridPrice + batteryPerMwh - capacitySaved,  gridTonnes,  flexYears, flexPeakMw, batteryMwh, false),
     option('hybrid',   'Hybrid (flexible + clean)',        gridPrice + cleanAdder + batteryPerMwh - capacitySaved, cleanTonnes, flexYears, flexPeakMw, batteryMwh, meets),
+    option('hybrid_2h','Hybrid, 2-hour battery',           gridPrice + cleanAdder + battery2PerMwh - capacitySaved, cleanTonnes, flexYears, flexPeakMw, battery2Mwh, meets),
   ]
 
   return {

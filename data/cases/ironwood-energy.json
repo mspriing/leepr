@@ -49,7 +49,7 @@
       "source_url": "https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capital_cost_AEO2020.pdf",
       "last_verified": "2019",
       "basis": "sourced",
-      "method": "Onsite gas is priced as a reciprocating engine plant, the technology data centers buy for islanded supply (Wärtsilä's 412 MW, 40-engine order for an Ohio hyperscale campus, Power Engineering 16 Apr 2026). EIA AEO2020 capital cost report, Case 4, four 5.6 MW engines: $1,810/kW in 2019 dollars, the latest EIA engine case. Low $1,700/kW is the Wärtsilä 18V50SG screening cost in NYISO's 2025-2029 demand curve reset (Burns & McDonnell, Dec 2023). High $2,400/kW is the market quote S&P Global reported for new gas plants in May 2025."
+      "method": "Onsite gas is priced as a reciprocating engine plant, the technology data centers buy for islanded supply (W\u00e4rtsil\u00e4's 412 MW, 40-engine order for an Ohio hyperscale campus, Power Engineering 16 Apr 2026). EIA AEO2020 capital cost report, Case 4, four 5.6 MW engines: $1,810/kW in 2019 dollars, the latest EIA engine case. Low $1,700/kW is the W\u00e4rtsil\u00e4 18V50SG screening cost in NYISO's 2025-2029 demand curve reset (Burns & McDonnell, Dec 2023). High $2,400/kW is the market quote S&P Global reported for new gas plants in May 2025."
     },
     "gas_heat_rate_btu_per_kwh": {
       "value": 8295,
@@ -59,7 +59,7 @@
       "source_url": "https://www.eia.gov/analysis/studies/powerplants/capitalcost/pdf/capital_cost_AEO2020.pdf",
       "last_verified": "2019",
       "basis": "sourced",
-      "method": "EIA AEO2020 Case 4 reciprocating engines, 8,295 Btu/kWh. NYISO's Wärtsilä 18V50SG screening figure agrees at 8,290 Btu/kWh HHV."
+      "method": "EIA AEO2020 Case 4 reciprocating engines, 8,295 Btu/kWh. NYISO's W\u00e4rtsil\u00e4 18V50SG screening figure agrees at 8,290 Btu/kWh HHV."
     },
     "gas_fixed_om_usd_per_kw_yr": {
       "value": 35.16,
@@ -139,7 +139,7 @@
       "source_url": "https://www.power-eng.com/gas/data-center-power-crunch-lifts-engines-aeroderivatives-into-larger-role/",
       "last_verified": "2026-04",
       "basis": "modeled",
-      "method": "Wärtsilä's 412 MW engine order for an Ohio data center, placed in April 2026, targets commercial operation in early 2028, about two years. Value adds half a year for Pennsylvania air permitting. Low 2 years is that Ohio schedule. High 5 years is the average wait for a large gas turbine in 2025 (Wood Mackenzie via Utility Dive, 24 Feb 2026), the fallback if engines are not used."
+      "method": "W\u00e4rtsil\u00e4's 412 MW engine order for an Ohio data center, placed in April 2026, targets commercial operation in early 2028, about two years. Value adds half a year for Pennsylvania air permitting. Low 2 years is that Ohio schedule. High 5 years is the average wait for a large gas turbine in 2025 (Wood Mackenzie via Utility Dive, 24 Feb 2026), the fallback if engines are not used."
     },
     "battery_capex_usd_per_kwh": {
       "value": 334,
@@ -320,6 +320,16 @@
       "last_verified": "2026-07",
       "basis": "sourced",
       "method": "PJM's 2028/29 Base Residual Auction cleared 6,831.3 MW short of the reliability requirement. Low is the 2027/28 shortfall, 6,623 MW, the first year PJM cleared short."
+    },
+    "recommended_battery_hours": {
+      "value": 2,
+      "low": 2,
+      "high": 4,
+      "unit": "hours",
+      "source_url": "https://www.powermag.com/duke-researchers-grid-flexibility-key-to-accommodate-load-growth",
+      "last_verified": "2026-10",
+      "basis": "sourced",
+      "method": "Duke University's Rethinking Load Growth found average curtailment events of 1.7 to 2.1 hours at 0.25% to 1% curtailment, so a 2-hour battery covers a typical PJM emergency. The 4-hour battery in curtailment_event_hours stays as the conservative case."
     }
   }
 }
